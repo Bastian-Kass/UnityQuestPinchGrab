@@ -320,9 +320,7 @@ public class HandOVRGrabber : MonoBehaviour
         if (m_grabbedObj == null)
             return;
 
-
-
-        //TODO: For now ignoring position and rotation
+        // Calculating position and rotation given on grab start
         Vector3 grabbablePosition = pos + rot * m_grabbedObjectPosOff;
         Quaternion grabbableRotation = rot * m_grabbedObjectRotOff;
 
