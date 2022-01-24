@@ -264,24 +264,31 @@ public class HandOVRGrabber : MonoBehaviour
 
         if (m_grabbedObj != null)
         {
-            OVRPose localPose = new OVRPose { 
-                        position = OVRInput.GetLocalControllerPosition(m_controller), 
-                        orientation = OVRInput.GetLocalControllerRotation(m_controller) 
-                        };
+            // OVRPose localPose = new OVRPose { 
+            //             position = transform.position, 
+            //             orientation = transform.rotation
+            //             };
 
-            OVRPose offsetPose = new OVRPose { 
-                        position = m_anchorOffsetPosition, 
-                        orientation = m_anchorOffsetRotation 
-                        };
+            // OVRPose offsetPose = new OVRPose { 
+            //             position = m_anchorOffsetPosition, 
+            //             orientation = m_anchorOffsetRotation 
+            //             };
 
-            localPose = localPose * offsetPose;
+            // localPose = localPose * offsetPose;
 
-            OVRPose trackingSpace = transform.ToOVRPose() * localPose.Inverse();
+            
+            // 
+        
+
+            // OVRPose trackingSpace = transform.ToOVRPose() * localPose.Inverse();
             // Vector3 linearVelocity = trackingSpace.orientation * gameObject.GetComponent<Rigidbody>().velocity;
-            Vector3 linearVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerVelocity(m_controller);
-            Vector3 angularVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerAngularVelocity(m_controller);
+            Vector3 linearVelocity =  (m_lastPos - transform.position)/Time.deltaTime;
+            Vector3 angularVelocity = Vector3.zero;
+            
+            //  trackingSpace.orientation * OVRInput.GetLocalControllerVelocity(m_controller);
+            // Vector3 angularVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerAngularVelocity(m_controller);
 
-            debug_txt.text = OVRInput.GetLocalControllerPosition(m_controller).ToString();
+            debug_txt.text = linearVelocity.ToString();
 
             GrabbableRelease(linearVelocity, angularVelocity);
         }
