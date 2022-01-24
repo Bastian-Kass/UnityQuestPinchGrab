@@ -61,8 +61,6 @@ public class HandOVRGrabber : MonoBehaviour
     bool m_prev_grab = false;
     public OVRInput.Button trigger;
 
-    private Queue<Vector3> location_history = new Queue<Vector3>();
-
     public HandOVRGrabbable grabbedObject
     {
         get { return m_grabbedObj; }
@@ -282,6 +280,8 @@ public class HandOVRGrabber : MonoBehaviour
             Vector3 linearVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerVelocity(m_controller);
             Vector3 angularVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerAngularVelocity(m_controller);
 
+            debug_txt.text = linearVelocity.ToString() + "Hwllo world";
+
             GrabbableRelease(linearVelocity, angularVelocity);
         }
 
@@ -292,7 +292,7 @@ public class HandOVRGrabber : MonoBehaviour
 
     public void GrabbableRelease(Vector3 linearVelocity, Vector3 angularVelocity)
     {
-        
+
         m_grabbedObj.GrabEnd(linearVelocity, angularVelocity);
 
         if (m_parentHeldObject) 
