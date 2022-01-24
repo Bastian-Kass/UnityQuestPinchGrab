@@ -277,10 +277,11 @@ public class HandOVRGrabber : MonoBehaviour
             localPose = localPose * offsetPose;
 
             OVRPose trackingSpace = transform.ToOVRPose() * localPose.Inverse();
+            // Vector3 linearVelocity = trackingSpace.orientation * gameObject.GetComponent<Rigidbody>().velocity;
             Vector3 linearVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerVelocity(m_controller);
             Vector3 angularVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerAngularVelocity(m_controller);
 
-            debug_txt.text = linearVelocity.ToString() + "Hwllo world";
+            debug_txt.text = OVRInput.GetLocalControllerPosition(m_controller).ToString();
 
             GrabbableRelease(linearVelocity, angularVelocity);
         }
@@ -329,13 +330,13 @@ public class HandOVRGrabber : MonoBehaviour
 
         if (forceTeleport)
         {
-            grabbedRigidbody.transform.position = m_grabbedObjectPosOff;
-            grabbedRigidbody.transform.rotation = m_grabbedObjectRotOff;
+            grabbedRigidbody.transform.position = grabbablePosition;
+            grabbedRigidbody.transform.rotation = grabbableRotation;
         }
         else
         {
-            grabbedRigidbody.MovePosition(m_grabbedObjectPosOff);
-            grabbedRigidbody.MoveRotation(m_grabbedObjectRotOff);
+            grabbedRigidbody.MovePosition(grabbablePosition);
+            grabbedRigidbody.MoveRotation(grabbableRotation);
         }
 
     }
