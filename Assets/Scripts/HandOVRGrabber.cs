@@ -61,6 +61,8 @@ public class HandOVRGrabber : MonoBehaviour
     bool m_prev_grab = false;
     public OVRInput.Button trigger;
 
+    private Queue<Vector3> location_history = new Queue<Vector3>();
+
     public HandOVRGrabbable grabbedObject
     {
         get { return m_grabbedObj; }
@@ -72,6 +74,7 @@ public class HandOVRGrabber : MonoBehaviour
         //Getting hand
         OVRSkeleton skeleton = gameObject.GetComponentInParent<OVRSkeleton>();
 
+        // Locating the hand index and moving the trigger object to the tip
         foreach (OVRBone bone in skeleton.Bones)
             if (bone.Id == OVRSkeleton.BoneId.Hand_IndexTip)
             {
@@ -80,7 +83,7 @@ public class HandOVRGrabber : MonoBehaviour
             }
                 
             
-        
+        // Referencing the renderer for debuging purposes
         m_renderer = gameObject.GetComponent<Renderer>();
 
         m_lastPos = transform.position;
@@ -117,10 +120,7 @@ public class HandOVRGrabber : MonoBehaviour
 
     void OnUpdatedAnchors()
     {
-        
         MoveGrabbedObject(transform.position, transform.rotation);
-
-        //Updating inputs
         MyCheckForGrabOrRelease();
     }
 
@@ -246,15 +246,14 @@ public class HandOVRGrabber : MonoBehaviour
         if (closestGrabbable != null)
         {
 
-            //closestGrabbable.GetComponent<Rigidbody>().useGravity = false;
             m_grabbedObj = closestGrabbable;
+
+            DetermineOnGrabOffset();
 
             m_grabbedObj.GrabBegin(this, m_grabbedObj.GetComponent<Collider>());
 
             m_lastPos = transform.position;
             m_lastRot = transform.rotation;
-
-            
 
             MoveGrabbedObject(m_lastPos, m_lastRot, true);
 
@@ -264,17 +263,25 @@ public class HandOVRGrabber : MonoBehaviour
 
     private void GrabEnd()
     {
+
         if (m_grabbedObj != null)
         {
-            OVRPose localPose = new OVRPose { position = OVRInput.GetLocalControllerPosition(m_controller), orientation = OVRInput.GetLocalControllerRotation(m_controller) };
-            OVRPose offsetPose = new OVRPose { position = m_anchorOffsetPosition, orientation = m_anchorOffsetRotation };
+            OVRPose localPose = new OVRPose { 
+                        position = OVRInput.GetLocalControllerPosition(m_controller), 
+                        orientation = OVRInput.GetLocalControllerRotation(m_controller) 
+                        };
+
+            OVRPose offsetPose = new OVRPose { 
+                        position = m_anchorOffsetPosition, 
+                        orientation = m_anchorOffsetRotation 
+                        };
+
             localPose = localPose * offsetPose;
 
             OVRPose trackingSpace = transform.ToOVRPose() * localPose.Inverse();
             Vector3 linearVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerVelocity(m_controller);
             Vector3 angularVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerAngularVelocity(m_controller);
 
-            //m_grabbedObj.GetComponent<Rigidbody>().useGravity = true;
             GrabbableRelease(linearVelocity, angularVelocity);
         }
 
@@ -287,7 +294,10 @@ public class HandOVRGrabber : MonoBehaviour
     {
         
         m_grabbedObj.GrabEnd(linearVelocity, angularVelocity);
-        if (m_parentHeldObject) m_grabbedObj.transform.parent = null;
+
+        if (m_parentHeldObject) 
+            m_grabbedObj.transform.parent = null;
+
         m_grabbedObj = null;
     }
 
@@ -312,20 +322,20 @@ public class HandOVRGrabber : MonoBehaviour
 
 
         //TODO: For now ignoring position and rotation
-        //Vector3 grabbablePosition = pos + rot * m_grabbedObjectPosOff;
-        //Quaternion grabbableRotation = rot * m_grabbedObjectRotOff;
+        Vector3 grabbablePosition = pos + rot * m_grabbedObjectPosOff;
+        Quaternion grabbableRotation = rot * m_grabbedObjectRotOff;
 
         Rigidbody grabbedRigidbody = m_grabbedObj.GetComponent<Rigidbody>();
 
         if (forceTeleport)
         {
-            grabbedRigidbody.transform.position = pos;
-            grabbedRigidbody.transform.rotation = rot;
+            grabbedRigidbody.transform.position = m_grabbedObjectPosOff;
+            grabbedRigidbody.transform.rotation = m_grabbedObjectRotOff;
         }
         else
         {
-            grabbedRigidbody.MovePosition(pos);
-            grabbedRigidbody.MoveRotation(rot);
+            grabbedRigidbody.MovePosition(m_grabbedObjectPosOff);
+            grabbedRigidbody.MoveRotation(m_grabbedObjectRotOff);
         }
 
     }
@@ -356,6 +366,39 @@ public class HandOVRGrabber : MonoBehaviour
         {
             GrabbableRelease(Vector3.zero, Vector3.zero);
         }
+    }
+
+    private void DetermineOnGrabOffset(){
+        if(m_grabbedObj.snapPosition)
+            {
+                m_grabbedObjectPosOff = m_gripTransform.localPosition;
+                if(m_grabbedObj.snapOffset)
+                {
+                    Vector3 snapOffset = m_grabbedObj.snapOffset.position;
+                    if (m_controller == OVRInput.Controller.LTouch) snapOffset.x = -snapOffset.x;
+                    m_grabbedObjectPosOff += snapOffset;
+                }
+            }
+            else
+            {
+                Vector3 relPos = m_grabbedObj.transform.position - transform.position;
+                relPos = Quaternion.Inverse(transform.rotation) * relPos;
+                m_grabbedObjectPosOff = relPos;
+            }
+
+            if (m_grabbedObj.snapOrientation)
+            {
+                m_grabbedObjectRotOff = m_gripTransform.localRotation;
+                if(m_grabbedObj.snapOffset)
+                {
+                    m_grabbedObjectRotOff = m_grabbedObj.snapOffset.rotation * m_grabbedObjectRotOff;
+                }
+            }
+            else
+            {
+                Quaternion relOri = Quaternion.Inverse(transform.rotation) * m_grabbedObj.transform.rotation;
+                m_grabbedObjectRotOff = relOri;
+            }
     }
 
 }
