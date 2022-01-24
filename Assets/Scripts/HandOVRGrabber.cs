@@ -288,7 +288,7 @@ public class HandOVRGrabber : MonoBehaviour
             //  trackingSpace.orientation * OVRInput.GetLocalControllerVelocity(m_controller);
             // Vector3 angularVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerAngularVelocity(m_controller);
 
-            debug_txt.text = linearVelocity.ToString();
+            debug_txt.text = m_lastPos.ToString() + transform.position.ToString();
 
             GrabbableRelease(linearVelocity, angularVelocity);
         }
@@ -327,9 +327,11 @@ public class HandOVRGrabber : MonoBehaviour
         if (m_grabbedObj == null)
             return;
 
-        // Calculating position and rotation given on grab start
-        Vector3 grabbablePosition = pos + rot * m_grabbedObjectPosOff;
-        Quaternion grabbableRotation = rot * m_grabbedObjectRotOff;
+        // Not using offset
+        // Vector3 grabbablePosition = pos + rot * m_grabbedObjectPosOff;
+        // Quaternion grabbableRotation = rot * m_grabbedObjectRotOff;
+        Vector3 grabbablePosition = pos;
+        Quaternion grabbableRotation = rot;
 
         Rigidbody grabbedRigidbody = m_grabbedObj.GetComponent<Rigidbody>();
 
