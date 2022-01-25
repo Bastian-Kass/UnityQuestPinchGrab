@@ -1,6 +1,9 @@
 # UnityQuestPinchGrab
 ### Test project to implement grabbing things with the oculusSDK and the hand-based pinching gesture
 
+# Instalation warning
+*To compile the project the 'build settings' might need to be changed to Android upon first access
+
 
 ## Abstract
 Since the OculusSDK prefabs for OVRGrabber and OVRGrabbable and not prepared to work with hand gestures(only with quest controllers and triggers), I worked in this simple project to modify the given classes and implement them myself.
