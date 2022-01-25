@@ -274,24 +274,10 @@ public class HandOVRGrabber : MonoBehaviour
         if (m_grabbedObj != null)
         {
 
-            Vector3 velocity = (m_lastPos - transform.position) / Time.deltaTime;
+            Vector3 velocity = (transform.position - m_lastPos) / Time.deltaTime;
 
-            Vector3 linearVelocity = transform.rotation * velocity;
+            Vector3 linearVelocity = velocity;
             Vector3 angularVelocity = Vector3.zero;
-
-
-            // OVRPose localPose = new OVRPose { 
-            //             position = transform.position, 
-            //             orientation = transform.rotation
-            //             };
-
-            // OVRPose trackingSpace = transform.ToOVRPose() * localPose.Inverse();
-            // Vector3 linearVelocity = trackingSpace.orientation * gameObject.GetComponent<Rigidbody>().velocity;
-            // Vector3 linearVelocity =  (m_lastPos - transform.position)/Time.deltaTime;
-            // Vector3 angularVelocity = Vector3.zero;
-            
-			// Vector3 linearVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerVelocity(m_controller);
-			// Vector3 angularVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerAngularVelocity(m_controller);
 
             debug_txt.text = (m_lastPos*100).ToString() + '\n' +  (transform.position * 100).ToString() + '\n' + linearVelocity;
 
