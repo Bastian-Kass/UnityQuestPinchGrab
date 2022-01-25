@@ -2,7 +2,7 @@
 ### Test project to implement grabbing things with the oculusSDK and the hand-based pinching gesture
 
 # Instalation warning
-*To compile the project the 'build settings' might need to be changed to Android upon first access
+*To compile the project the 'build settings' might need to be changed to Android upon first access*
 
 
 ## Abstract
@@ -23,7 +23,7 @@ It also makes a better implementation to override both classes(OVRGrabber and OV
 ## Hand OVRGrabber
 Same as HandOVRGrabbable, the class was copied over and not extended since not all the methods that required override were made virtual; additionally, some core components changed in the class so it made sense to create a new one instead of just overriding everything.
 
-*Makes use of a 3D object and TriggerEnter/TriggerExit to detect collision against grabbable objects, and initialize the grab sequence when detecting certain input*
+**Makes use of a 3D object and TriggerEnter/TriggerExit to detect collision against grabbable objects, and initialize the grab sequence when detecting certain input**
 
 Major changes include:
 * Public settable variable for the trigger to be detected for the grabbing motion to begin
@@ -48,4 +48,6 @@ Custom script that detects colission to items tagged as *BoundryBox* and resets 
 
 # Work for future iterations
 
-Due to the natural motion when throwing an object, basing the velocity on only the last two positions of the hand may result in velocities that are 'pointing down'. For better UX it would be interesting to store tha last 3-5 positions in a queue and weight them to determine a better trayectory for the throw.
+* Due to the natural motion when throwing an object, basing the velocity on only the last two positions of the hand may result in velocities that are 'pointing down'. For better UX it would be interesting to store tha last 3-5 positions in a queue and weight them to determine a better trayectory for the throw.
+* For better UX, the 3D object used as trigger should be transparent and glowing to let the grabbed object be seen upon grab
+* Decide what happend on bad/poor hand recognition
