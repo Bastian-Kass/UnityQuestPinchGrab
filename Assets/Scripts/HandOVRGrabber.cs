@@ -127,7 +127,7 @@ public class HandOVRGrabber : MonoBehaviour
         MoveGrabbedObject(transform.position, transform.rotation);
         MyCheckForGrabOrRelease();
 
-        //Storing values for next iteration
+        //Storing values for next iteration -> Useful when calculating release velocity
         m_lastPos = transform.position;
         m_lastRot = transform.rotation;
     }
