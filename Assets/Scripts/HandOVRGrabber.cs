@@ -126,6 +126,10 @@ public class HandOVRGrabber : MonoBehaviour
     {
         MoveGrabbedObject(transform.position, transform.rotation);
         MyCheckForGrabOrRelease();
+
+        //Storing values for next iteration
+        m_lastPos = transform.position;
+        m_lastRot = transform.rotation;
     }
 
     void MyCheckForGrabOrRelease()
@@ -289,7 +293,7 @@ public class HandOVRGrabber : MonoBehaviour
 			// Vector3 linearVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerVelocity(m_controller);
 			// Vector3 angularVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerAngularVelocity(m_controller);
 
-            debug_txt.text = m_lastPos.ToString() + '\n' +  transform.position.ToString() + '\n' + linearVelocity;
+            debug_txt.text = (m_lastPos*100).ToString() + '\n' +  (transform.position * 100).ToString() + '\n' + linearVelocity;
 
             GrabbableRelease(linearVelocity, angularVelocity);
         }
@@ -346,10 +350,6 @@ public class HandOVRGrabber : MonoBehaviour
             m_grabbedObj_Rigidbody.MovePosition(grabbablePosition);
             m_grabbedObj_Rigidbody.MoveRotation(grabbableRotation);
         }
-
-        //Storing values for next iteration
-        m_lastPos = pos;
-        m_lastRot = rot;
 
     }
 
