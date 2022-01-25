@@ -252,7 +252,8 @@ public class HandOVRGrabber : MonoBehaviour
             m_grabbedObj = closestGrabbable;
             m_grabbedObj_Rigidbody = m_grabbedObj.GetComponent<Rigidbody>();
 
-            DetermineOnGrabOffset();
+            // Not using offset
+            // DetermineOnGrabOffset();
 
             m_grabbedObj.GrabBegin(this, m_grabbedObj.GetComponent<Collider>());
 
@@ -308,7 +309,9 @@ public class HandOVRGrabber : MonoBehaviour
         if (m_parentHeldObject) 
             m_grabbedObj.transform.parent = null;
 
+        m_grabbedObj_Rigidbody = null;
         m_grabbedObj = null;
+        
     }
 
     public void ForceRelease(HandOVRGrabbable grabbable)
@@ -326,7 +329,7 @@ public class HandOVRGrabber : MonoBehaviour
     public void MoveGrabbedObject(Vector3 pos, Quaternion rot, bool forceTeleport = false)
     {
         // There needs to be a grabbed body
-        if (m_grabbedObj == null)
+        if (m_grabbedObj == null || m_grabbedObj_Rigidbody == null)
             return;
 
         // Not using offset
@@ -351,11 +354,11 @@ public class HandOVRGrabber : MonoBehaviour
     private void GrabVolumeEnable(bool enabled)
     {
         if (m_grabVolumeEnabled == enabled)
-        {
             return;
-        }
+        
 
         m_grabVolumeEnabled = enabled;
+
         for (int i = 0; i < m_grabVolumes.Length; ++i)
         {
             Collider grabVolume = m_grabVolumes[i];
