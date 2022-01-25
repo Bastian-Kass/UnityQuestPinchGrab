@@ -42,3 +42,7 @@ Major changes include:
 ## Area Bound Reset
 
 Custom script that detects colission to items tagged as *BoundryBox* and resets the item to the location of the object tagged as 'RespawnBox'. Attached to the HandOVRGrabbable to reset the to the bowl when thwon out of hand's reach.
+
+# Work for future iterations
+
+Due to the natural motion when throwing an object, basing the velocity on only the last two positions of the hand may result in velocities that are 'pointing down'. For better UX it would be interesting to store tha last 3-5 positions in a queue and weight them to determine a better trayectory for the throw.
