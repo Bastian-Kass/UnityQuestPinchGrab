@@ -52,6 +52,7 @@ public class HandOVRGrabber : MonoBehaviour
     private Vector3 m_anchorOffsetPosition;
 
     private HandOVRGrabbable m_grabbedObj = null;
+    private Rigidbody m_grabbedObj_Rigidbody = null;
     private Vector3 m_grabbedObjectPosOff;
     private Quaternion m_grabbedObjectRotOff;
 
@@ -118,7 +119,11 @@ public class HandOVRGrabber : MonoBehaviour
 
     void OnUpdatedAnchors()
     {
-        MoveGrabbedObject(transform.position, transform.rotation);
+
+        m_lastPos = transform.position;
+        m_lastRot =  transform.rotation;
+
+        MoveGrabbedObject(m_lastPos, m_lastRot);
         MyCheckForGrabOrRelease();
     }
 
@@ -245,6 +250,7 @@ public class HandOVRGrabber : MonoBehaviour
         {
 
             m_grabbedObj = closestGrabbable;
+            m_grabbedObj_Rigidbody = m_grabbedObj.GetComponent<Rigidbody>();
 
             DetermineOnGrabOffset();
 
@@ -264,31 +270,27 @@ public class HandOVRGrabber : MonoBehaviour
 
         if (m_grabbedObj != null)
         {
+
+            Vector3 velocity = (m_lastPos - transform.position) / Time.deltaTime;
+
+            Vector3 linearVelocity = transform.rotation * velocity;
+            Vector3 angularVelocity = Vector3.zero;
+
+
             // OVRPose localPose = new OVRPose { 
             //             position = transform.position, 
             //             orientation = transform.rotation
             //             };
 
-            // OVRPose offsetPose = new OVRPose { 
-            //             position = m_anchorOffsetPosition, 
-            //             orientation = m_anchorOffsetRotation 
-            //             };
-
-            // localPose = localPose * offsetPose;
-
-            
-            // 
-        
-
             // OVRPose trackingSpace = transform.ToOVRPose() * localPose.Inverse();
             // Vector3 linearVelocity = trackingSpace.orientation * gameObject.GetComponent<Rigidbody>().velocity;
-            Vector3 linearVelocity =  (m_lastPos - transform.position)/Time.deltaTime;
-            Vector3 angularVelocity = Vector3.zero;
+            // Vector3 linearVelocity =  (m_lastPos - transform.position)/Time.deltaTime;
+            // Vector3 angularVelocity = Vector3.zero;
             
-            //  trackingSpace.orientation * OVRInput.GetLocalControllerVelocity(m_controller);
-            // Vector3 angularVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerAngularVelocity(m_controller);
+			// Vector3 linearVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerVelocity(m_controller);
+			// Vector3 angularVelocity = trackingSpace.orientation * OVRInput.GetLocalControllerAngularVelocity(m_controller);
 
-            debug_txt.text = m_lastPos.ToString() + transform.position.ToString();
+            debug_txt.text = m_lastPos.ToString() + '\n' +  transform.position.ToString() + '\n' + linearVelocity;
 
             GrabbableRelease(linearVelocity, angularVelocity);
         }
@@ -333,17 +335,15 @@ public class HandOVRGrabber : MonoBehaviour
         Vector3 grabbablePosition = pos;
         Quaternion grabbableRotation = rot;
 
-        Rigidbody grabbedRigidbody = m_grabbedObj.GetComponent<Rigidbody>();
-
         if (forceTeleport)
         {
-            grabbedRigidbody.transform.position = grabbablePosition;
-            grabbedRigidbody.transform.rotation = grabbableRotation;
+            m_grabbedObj_Rigidbody.transform.position = grabbablePosition;
+            m_grabbedObj_Rigidbody.transform.rotation = grabbableRotation;
         }
         else
         {
-            grabbedRigidbody.MovePosition(grabbablePosition);
-            grabbedRigidbody.MoveRotation(grabbableRotation);
+            m_grabbedObj_Rigidbody.MovePosition(grabbablePosition);
+            m_grabbedObj_Rigidbody.MoveRotation(grabbableRotation);
         }
 
     }
