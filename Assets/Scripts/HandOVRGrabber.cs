@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 /// <summary>
-/// Allows grabbing things with a specific trigger
+/// Modified OVRGrabber to work with hand gesture pinch
+/// Author Sebastian Casillas
 /// </summary>
 public class HandOVRGrabber : MonoBehaviour
 {
@@ -20,18 +20,20 @@ public class HandOVRGrabber : MonoBehaviour
 
 
     // If true, this script will move the hand to the transform specified by m_parentTransform, using MovePosition in
-    // Update. This allows correct physics behavior, at the cost of some latency. In this usage scenario, you
-    // should NOT parent the hand to the hand anchor.
-    // (If m_moveHandPosition is false, this script will NOT update the game object's position.
-    // The hand gameObject can simply be attached to the hand anchor, which updates position in LateUpdate,
-    // gaining us a few ms of reduced latency.)
+    // Update. This allows correct physics behavior, at the cost of some latency. In this usage scenario, you should 
+    // NOT parent the hand to the hand anchor.
+    // (If m_moveHandPosition is false, this script will NOT update the game object's position. The hand gameObject 
+    // can simply be attached to the hand anchor, which updates position in LateUpdate, gaining us a few ms of reduced 
+    // latency.)
     [SerializeField]
     private bool m_moveHandPosition = false;
+
     // You can set this explicitly in the inspector if you're using m_moveHandPosition.
     // Otherwise, you should typically leave this null and simply parent the hand to the hand anchor
     // in your scene, using Unity's inspector.
     [SerializeField]
     private Transform m_parentTransform;
+
     // Child/attached transforms of the grabber, indicating where to snap held objects to (if you snap them).
     // Also used for ranking grab targets in case of multiple candidates.
     [SerializeField]
@@ -62,6 +64,8 @@ public class HandOVRGrabber : MonoBehaviour
     bool m_prev_grab = false;
     public OVRInput.Button trigger;
 
+
+
     public HandOVRGrabbable grabbedObject
     {
         get { return m_grabbedObj; }
@@ -85,6 +89,7 @@ public class HandOVRGrabber : MonoBehaviour
         // Referencing the renderer for debuging purposes
         m_renderer = gameObject.GetComponent<Renderer>();
 
+        //Got to have first values for the release not to crash
         m_lastPos = transform.position;
         m_lastRot = transform.rotation;
 
@@ -119,11 +124,7 @@ public class HandOVRGrabber : MonoBehaviour
 
     void OnUpdatedAnchors()
     {
-
-        m_lastPos = transform.position;
-        m_lastRot =  transform.rotation;
-
-        MoveGrabbedObject(m_lastPos, m_lastRot);
+        MoveGrabbedObject(transform.position, transform.rotation);
         MyCheckForGrabOrRelease();
     }
 
@@ -257,10 +258,7 @@ public class HandOVRGrabber : MonoBehaviour
 
             m_grabbedObj.GrabBegin(this, m_grabbedObj.GetComponent<Collider>());
 
-            m_lastPos = transform.position;
-            m_lastRot = transform.rotation;
-
-            MoveGrabbedObject(m_lastPos, m_lastRot, true);
+            MoveGrabbedObject(transform.position, transform.rotation, true);
 
         }
 
@@ -348,6 +346,10 @@ public class HandOVRGrabber : MonoBehaviour
             m_grabbedObj_Rigidbody.MovePosition(grabbablePosition);
             m_grabbedObj_Rigidbody.MoveRotation(grabbableRotation);
         }
+
+        //Storing values for next iteration
+        m_lastPos = pos;
+        m_lastRot = rot;
 
     }
 
