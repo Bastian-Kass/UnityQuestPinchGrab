@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 /// <summary>
 /// Modified OVRGrabber to work with hand gesture pinch
@@ -8,8 +9,6 @@ using UnityEngine.UI;
 /// </summary>
 public class HandOVRGrabber : MonoBehaviour
 {
-    public bool debug = false;
-    public Text debug_txt;
 
     // Should be OVRInput.Controller.LTouch or OVRInput.Controller.RTouch.
     [SerializeField]
@@ -48,21 +47,16 @@ public class HandOVRGrabber : MonoBehaviour
     private bool m_grabVolumeEnabled = true;
 
     private Vector3 m_lastPos;
-    private Quaternion m_lastRot;
-
-    private Quaternion m_anchorOffsetRotation;
-    private Vector3 m_anchorOffsetPosition;
-
     private HandOVRGrabbable m_grabbedObj = null;
     private Rigidbody m_grabbedObj_Rigidbody = null;
-    private Vector3 m_grabbedObjectPosOff;
-    private Quaternion m_grabbedObjectRotOff;
 
     private Dictionary<HandOVRGrabbable, int> m_grabCandidates = new Dictionary<HandOVRGrabbable, int>();
     private bool m_operatingWithoutOVRCameraRig = true;
 
     bool m_prev_grab = false;
     public OVRInput.Button trigger;
+
+    private CircularFloatArray circularVelocityArray;
 
 
 
@@ -91,22 +85,17 @@ public class HandOVRGrabber : MonoBehaviour
 
         //Got to have first values for the release not to crash
         m_lastPos = transform.position;
-        m_lastRot = transform.rotation;
 
-        if (m_parentTransform == null)
-            m_parentTransform = gameObject.transform;
-        
+        circularVelocityArray = new CircularFloatArray(10);
     }
 
     public void Awake()
     {
-        m_anchorOffsetPosition = transform.localPosition;
-        m_anchorOffsetRotation = transform.localRotation;
-
         if (!m_moveHandPosition)
         {
             // If we are being used with an OVRCameraRig, let it drive input updates, which may come from Update or FixedUpdate.
             OVRCameraRig rig = transform.GetComponentInParent<OVRCameraRig>();
+
             if (rig != null)
             {
                 rig.UpdatedAnchors += (r) => { OnUpdatedAnchors(); };
@@ -124,15 +113,19 @@ public class HandOVRGrabber : MonoBehaviour
 
     void OnUpdatedAnchors()
     {
-        MoveGrabbedObject(transform.position, transform.rotation);
-        MyCheckForGrabOrRelease();
+
+        Vector3 velocity = (transform.position - m_lastPos) / Time.deltaTime;
+        circularVelocityArray.addItem(velocity);
+
+        MoveGrabbedObject(transform.position);
+        CheckForGrabOrRelease();
 
         //Storing values for next iteration -> Useful when calculating release velocity
         m_lastPos = transform.position;
-        m_lastRot = transform.rotation;
+
     }
 
-    void MyCheckForGrabOrRelease()
+    void CheckForGrabOrRelease()
     {
 
         bool grab = OVRInput.Get(trigger);
@@ -144,18 +137,12 @@ public class HandOVRGrabber : MonoBehaviour
             // Grab init and no object being grabbed
             if (grab)
             {
-                if(debug)
-                    m_renderer.material.color = Color.cyan;
-
                 if (m_grabbedObj == null)
                     GrabBegin();
             }
             // Grab ending and an object being grabbed
             else
             {
-                if (debug)
-                    m_renderer.material.color = Color.white;
-
                 if (m_grabbedObj != null)
                     GrabEnd();
   
@@ -175,8 +162,7 @@ public class HandOVRGrabber : MonoBehaviour
             return;
 
         //Same as parent class, I just added this method so set up color indicator
-        if (debug)
-            grabbable.GetComponent<Renderer>().material.color = Color.green;
+        grabbable.GetComponent<Renderer>().material.color = Color.green;
 
         // Add the grabbable
         int refCount = 0;
@@ -193,8 +179,7 @@ public class HandOVRGrabber : MonoBehaviour
 
 
         //Same as parent class, I just added this method so set up color indicator
-        if (debug)
-            grabbable.GetComponent<Renderer>().material.color = Color.blue;
+        grabbable.GetComponent<Renderer>().material.color = Color.blue;
 
         // Remove the grabbable
         int refCount = 0;
@@ -213,22 +198,19 @@ public class HandOVRGrabber : MonoBehaviour
 
     private void GrabBegin()
     {
-        float closestMagSq = float.MaxValue;
+        float closestMagSq = float.MaxValue; // Comparing with max float value
         HandOVRGrabbable closestGrabbable = null;
 
         // Iterate grab candidates and find the closest grabbable candidate
         foreach (HandOVRGrabbable grabbable in m_grabCandidates.Keys)
         {
 
-
-            bool canGrab = !(grabbable.isGrabbed && !grabbable.allowOffhandGrab);
-            if (!canGrab)
-            {
+            // Ignoring already grabbed items
+            if (grabbable.isGrabbed)
                 continue;
-            }
-
-
-
+            
+            // Loocing for grabbable points
+            // TODO: Simplify, for balls there is only one point
             for (int j = 0; j < grabbable.grabPoints.Length; ++j)
             {
                 Collider grabbableCollider = grabbable.grabPoints[j];
@@ -245,8 +227,6 @@ public class HandOVRGrabber : MonoBehaviour
 
         }
 
-
-
         // Disable grab volumes to prevent overlaps
         GrabVolumeEnable(false);
 
@@ -257,12 +237,9 @@ public class HandOVRGrabber : MonoBehaviour
             m_grabbedObj = closestGrabbable;
             m_grabbedObj_Rigidbody = m_grabbedObj.GetComponent<Rigidbody>();
 
-            // Not using offset
-            // DetermineOnGrabOffset();
-
             m_grabbedObj.GrabBegin(this, m_grabbedObj.GetComponent<Collider>());
 
-            MoveGrabbedObject(transform.position, transform.rotation, true);
+            MoveGrabbedObject(transform.position, true);
 
         }
 
@@ -276,12 +253,13 @@ public class HandOVRGrabber : MonoBehaviour
 
             Vector3 velocity = (transform.position - m_lastPos) / Time.deltaTime;
 
-            Vector3 linearVelocity = velocity;
-            Vector3 angularVelocity = Vector3.zero;
 
-            debug_txt.text = (m_lastPos*100).ToString() + '\n' +  (transform.position * 100).ToString() + '\n' + linearVelocity;
+            circularVelocityArray.addItem(velocity);
 
-            GrabbableRelease(linearVelocity, angularVelocity);
+
+            Vector3 linearVelocity = circularVelocityArray.getAverage();
+
+            GrabbableRelease(linearVelocity);
         }
 
         // Re-enable grab volumes to allow overlap events
@@ -289,10 +267,11 @@ public class HandOVRGrabber : MonoBehaviour
     }
 
 
-    public void GrabbableRelease(Vector3 linearVelocity, Vector3 angularVelocity)
+    public void GrabbableRelease(Vector3 linearVelocity)
     {
 
-        m_grabbedObj.GrabEnd(linearVelocity, angularVelocity);
+
+        m_grabbedObj.GrabEnd(linearVelocity);
 
         if (m_parentHeldObject) 
             m_grabbedObj.transform.parent = null;
@@ -314,28 +293,21 @@ public class HandOVRGrabber : MonoBehaviour
         }
     }
 
-    public void MoveGrabbedObject(Vector3 pos, Quaternion rot, bool forceTeleport = false)
+    public void MoveGrabbedObject(Vector3 pos, bool forceTeleport = false)
     {
         // There needs to be a grabbed body
         if (m_grabbedObj == null || m_grabbedObj_Rigidbody == null)
             return;
 
-        // Not using offset
-        // Vector3 grabbablePosition = pos + rot * m_grabbedObjectPosOff;
-        // Quaternion grabbableRotation = rot * m_grabbedObjectRotOff;
         Vector3 grabbablePosition = pos;
-        Quaternion grabbableRotation = rot;
+
+        // Saving last velocity instead of last position
 
         if (forceTeleport)
-        {
             m_grabbedObj_Rigidbody.transform.position = grabbablePosition;
-            m_grabbedObj_Rigidbody.transform.rotation = grabbableRotation;
-        }
         else
-        {
             m_grabbedObj_Rigidbody.MovePosition(grabbablePosition);
-            m_grabbedObj_Rigidbody.MoveRotation(grabbableRotation);
-        }
+        
 
     }
 
@@ -354,50 +326,56 @@ public class HandOVRGrabber : MonoBehaviour
         }
 
         if (!m_grabVolumeEnabled)
-        {
             m_grabCandidates.Clear();
-        }
+        
     }
 
-    private void OffhandGrabbed(HandOVRGrabbable grabbable)
+}
+public class  CircularFloatArray
+{
+
+    private Vector3[] items;
+    private int index = 0;
+
+    private bool circularRoundStateFlag = false;
+
+    private int size;
+    public CircularFloatArray(int size)
     {
-        if (m_grabbedObj == grabbable)
-        {
-            GrabbableRelease(Vector3.zero, Vector3.zero);
+        this.size = size;
+        // The array cannot be null
+        if (size<=0) 
+            throw new ArgumentException("There needs to be a size of minimum 1");
+
+        //Initializing the circular array
+        items = new Vector3[size];
+    }
+
+    public void addItem(Vector3 v){
+
+        if(index == size){
+            circularRoundStateFlag = true;
+            index = 0;
         }
+        
+        items[index] = v;
+
     }
 
-    private void DetermineOnGrabOffset(){
-        if(m_grabbedObj.snapPosition)
-            {
-                m_grabbedObjectPosOff = m_gripTransform.localPosition;
-                if(m_grabbedObj.snapOffset)
-                {
-                    Vector3 snapOffset = m_grabbedObj.snapOffset.position;
-                    if (m_controller == OVRInput.Controller.LTouch) snapOffset.x = -snapOffset.x;
-                    m_grabbedObjectPosOff += snapOffset;
-                }
-            }
-            else
-            {
-                Vector3 relPos = m_grabbedObj.transform.position - transform.position;
-                relPos = Quaternion.Inverse(transform.rotation) * relPos;
-                m_grabbedObjectPosOff = relPos;
-            }
+    public Vector3 getAverage(){
+        //We need average speed and average trayectory
+        
+        Vector3 average = Vector3.zero;
 
-            if (m_grabbedObj.snapOrientation)
-            {
-                m_grabbedObjectRotOff = m_gripTransform.localRotation;
-                if(m_grabbedObj.snapOffset)
-                {
-                    m_grabbedObjectRotOff = m_grabbedObj.snapOffset.rotation * m_grabbedObjectRotOff;
-                }
-            }
-            else
-            {
-                Quaternion relOri = Quaternion.Inverse(transform.rotation) * m_grabbedObj.transform.rotation;
-                m_grabbedObjectRotOff = relOri;
-            }
+        // TODO: weight each vector by the distance to the one before it to get a nice curve
+
+        for (int i = 0; i < items.Length; i++)
+            average += items[i];
+
+        return average;
+
     }
+
+
 
 }

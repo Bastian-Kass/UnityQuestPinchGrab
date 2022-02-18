@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1811140766
+CRC: 2204082484
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d07f5d4319374277c79658ff8b32f2d4
+    Hash: 6ac610b85461638a65648f8ab70e5249
   TypeTreeHash:
     serializedVersion: 2
     Hash: b0363f7088f9761414f730641bf9a24b
@@ -13,6 +13,7 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Oculus/VR/Textures/HandTracking/HandTracking_uvmap_2048.png
-- Assets/ExampleAssets/Textures/Grid_Light_512x512.png
+- Assets/Oculus/Interaction/Samples/Objects/Props/StonePolyhedra/Textures/StonePolyhedra_AlbedoRoughness.png
+- Assets/Oculus/VR/Textures/OculusTouchForRift/touchController_albedo.png
+- Assets/Oculus/Interaction/Runtime/Textures/fingers_glow_mask.png
 Dependencies: []

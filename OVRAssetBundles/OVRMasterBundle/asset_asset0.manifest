@@ -1,0 +1,43 @@
+ManifestFileVersion: 0
+CRC: 915257836
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8d21f1ed39497b769b77c0c029effdb3
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c9480adb453efa58ab1f6d8aa06b8720
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2d179fd81cd2e344ab2e610cd5f7260e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c5af6ab9d1bd4a47970ad151090281f3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 84de3b22a7efbab46967c1a17f5b8cda, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 156
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Oculus.Interaction
+  ClassName: Oculus.Interaction.PoseDetection.FingerFeatureStateThreshold
+- AssemblyName: Oculus.Interaction
+  ClassName: Oculus.Interaction.PoseDetection.FingerFeatureThresholds
+Assets:
+- Assets/Oculus/Interaction/Runtime/DefaultSettings/PoseDetection/MiddleFingerFeatureStateThresholds.asset
+- Assets/Oculus/Interaction/Runtime/DefaultSettings/PoseDetection/DefaultThumbFeatureStateThresholds.asset
+- Assets/Oculus/Interaction/Runtime/Prefabs/HandGrab/GhostProvider.asset
+- Assets/Oculus/Interaction/Runtime/Meshes/HandLeft.asset
+- Assets/MyAssets/New Terrain.asset
+- Assets/Oculus/Interaction/Runtime/DefaultSettings/PoseDetection/DefaultFingerFeatureStateThresholds.asset
+- Assets/Oculus/Interaction/Runtime/Meshes/HandRight.asset
+- Assets/Oculus/Interaction/Runtime/DefaultSettings/PoseDetection/IndexFingerFeatureStateThresholds.asset
+Dependencies:
+- D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_prefab0

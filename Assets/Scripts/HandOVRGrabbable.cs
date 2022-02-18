@@ -111,12 +111,11 @@ public class HandOVRGrabbable : MonoBehaviour
     /// <summary>
     /// Notifies the object that it has been released.
     /// </summary>
-    public void GrabEnd(Vector3 linearVelocity, Vector3 angularVelocity)
+    public void GrabEnd(Vector3 linearVelocity)
     {
         Rigidbody rb = gameObject.GetComponent<Rigidbody>();
         rb.isKinematic = m_grabbedKinematic;
         rb.velocity = linearVelocity;
-        rb.angularVelocity = angularVelocity;
         m_grabbedBy = null;
         m_grabbedCollider = null;
     }
