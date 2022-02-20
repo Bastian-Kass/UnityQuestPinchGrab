@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3888302338
+CRC: 2427997055
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ba6b02551b5f7d6ffa4838d8cd11bc27
+    Hash: 29f89bfbd23eef0df7746a5be2cd47d8
   TypeTreeHash:
     serializedVersion: 2
     Hash: f64856a3d606b613608cbf22df470c60
@@ -25,8 +25,8 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/MyAssets/InfoBoard/InfoBoard.obj
 - Assets/MyAssets/Can/Soda_Can_01.obj
+- Assets/MyAssets/InfoBoard/InfoBoard.obj
 - Assets/MyAssets/Table/FoldingTable.obj
 - Assets/MyAssets/Bowl/fruit bowl.obj
 Dependencies: []

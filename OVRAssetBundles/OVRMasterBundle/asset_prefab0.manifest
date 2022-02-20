@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1424423458
+CRC: 1377441210
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: da5026847f98871704e98af2c4a24679
+    Hash: 0cab10f5b3ec02639b32c6aea50abc88
   TypeTreeHash:
     serializedVersion: 2
-    Hash: dc970df3b49d7aca4d00139cdbe9b2ad
+    Hash: 5e508c21a6bb806450c068ac82fd1554
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -84,8 +84,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: bffe606b408599b4fad696ddc889a943, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: d0ef03d17dc51314bb8e617e5a2f4e1b, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 194b7d1054b8fa64b9bdcea46d06c3a1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7daff26e66096cd49a253ca3ab592c03, type: 3}
@@ -125,8 +123,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 3e2cb428b733e56478338c736189a0d5, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4855895ba1c44959a306beb7ae318fc2, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 868254bcf2f2c284a96d635e959b1ece, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1a379f34d4f4f2e408d34f14bfb753ce, type: 3}
 - Class: 114
@@ -213,7 +209,6 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Oculus/Interaction/Runtime/Prefabs/HandGrab/HandGrabInteractor.prefab
 - Assets/Oculus/Interaction/Samples/Prefabs/OculusInteractionSampleRig.prefab
-- Assets/MyAssets/ThrowingBall.prefab
 - Assets/Prefabs/OculusInteractionSampleRig Variant.prefab
 - Assets/Oculus/Interaction/Samples/Audio/Prefabs/ComplexGrabStoneResize.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/Hands/RightHandVisual.prefab
@@ -221,13 +216,13 @@ Assets:
 - Assets/Oculus/Interaction/Samples/Audio/Prefabs/ComplexGrabStoneReleaseAudio.prefab
 - Assets/Oculus/Interaction/Samples/Objects/Props/StonePolyhedra/StoneDodecahedron.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/Poke/HandPokeInteractor.prefab
-- Assets/Oculus/Interaction/Samples/Audio/Prefabs/ObjectResizeUpAudio.prefab
 - Assets/MyAssets/Soda_Can_01 Variant.prefab
+- Assets/Oculus/Interaction/Samples/Audio/Prefabs/ObjectResizeUpAudio.prefab
 - Assets/Oculus/Interaction/Samples/Audio/Prefabs/ObjectResizeDownAudio.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/Hands/RightHandSynthetic.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/Hands/LeftHandVisual.prefab
-- Assets/Oculus/Interaction/Runtime/Prefabs/Poke/ControllerPokeInteractor.prefab
 - Assets/Oculus/Interaction/Samples/Audio/Prefabs/ComplexGrabStoneGrabAudio.prefab
+- Assets/Oculus/Interaction/Runtime/Prefabs/Poke/ControllerPokeInteractor.prefab
 - Assets/Oculus/VR/Prefabs/OVRCameraRig.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/HandGrab/Ghost-RightHand.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/Hands/LeftHandSynthetic.prefab

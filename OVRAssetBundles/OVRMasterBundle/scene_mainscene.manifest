@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2022863515
+CRC: 824611135
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 20b4ddeba0bfc9eb82de401b9e0cf3d3
+    Hash: 387ae911c540d84b5bed190cfbc3f30a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7336082457a8331d38bc7884325418ad
+    Hash: e0bf6de1a203919fc06f2c8fb132401e
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -102,8 +102,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: bffe606b408599b4fad696ddc889a943, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: d0ef03d17dc51314bb8e617e5a2f4e1b, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 194b7d1054b8fa64b9bdcea46d06c3a1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7daff26e66096cd49a253ca3ab592c03, type: 3}
@@ -148,9 +146,9 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 868254bcf2f2c284a96d635e959b1ece, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 1a379f34d4f4f2e408d34f14bfb753ce, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: abac3dd9df96acc469afa74a1490e54c, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 84de3b22a7efbab46967c1a17f5b8cda, type: 3}
 - Class: 114
@@ -229,3 +227,4 @@ Dependencies:
 - D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_mat0
 - D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_obj0
 - D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_prefab0
+- D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_wav0

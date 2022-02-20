@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 853293543
+CRC: 35608256
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6a339851bef4bfd2bc0487cf4a6421fe
+    Hash: 946636fd976349380dfbebc3c5359db5
   TypeTreeHash:
     serializedVersion: 2
     Hash: 939e20ecac0e95a3f7c5cfb3e57acb1d
@@ -25,7 +25,6 @@ Assets:
 - Assets/Materials/Glass.mat
 - Assets/Oculus/Interaction/Runtime/Materials/OculusHand.mat
 - Assets/Oculus/VR/Meshes/OculusTouchForQuest2/Materials/OculusTouchForQuest2_MAT.mat
-- Assets/Materials/New Material.mat
 - Assets/Oculus/Interaction/Runtime/Materials/Unlit Material.mat
 Dependencies:
 - D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_png0
