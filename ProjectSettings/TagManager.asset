@@ -6,6 +6,7 @@ TagManager:
   tags:
   - BoundryBox
   - RespawnBox
+  - GameBall
   layers:
   - Default
   - TransparentFX
