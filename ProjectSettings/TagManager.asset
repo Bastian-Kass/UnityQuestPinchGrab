@@ -4,9 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - BoundryBox
-  - RespawnBox
   - GameBall
+  - TargetZone
   layers:
   - Default
   - TransparentFX

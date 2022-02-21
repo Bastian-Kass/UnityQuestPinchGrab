@@ -8,6 +8,8 @@ using UnityEngine.Events;
 public class ThrowGameSO : ScriptableObject
 {
 
+    private bool isThrowing = false;
+
     [SerializeField]
     private int TotalScore;
 
@@ -22,6 +24,14 @@ public class ThrowGameSO : ScriptableObject
 
     [System.NonSerialized]
     public UnityEvent<bool> CheatModeChange;
+
+    private bool playerIsThrowing = false;
+
+    public bool PlayerIsThrowing
+    {
+        get { return playerIsThrowing; }
+        set { playerIsThrowing = value; }
+    }
 
     private void setScore(int score){
         TotalScore = score;
@@ -40,6 +50,11 @@ public class ThrowGameSO : ScriptableObject
     public void SetCheatMode(bool b){
         this.IsCheatMode = b;
         CheatModeChange.Invoke(b);
+    }
+
+    public void ToggleCheatMode(){
+        this.IsCheatMode = !IsCheatMode;
+        CheatModeChange.Invoke(IsCheatMode);
     }
 
     public int GetTotalScore(){
