@@ -6,6 +6,10 @@ TagManager:
   tags:
   - GameBall
   - TargetZone
+  - GameTarget
+  - BallStop
+  - ThrowingZone
+  - GameBounds
   layers:
   - Default
   - TransparentFX

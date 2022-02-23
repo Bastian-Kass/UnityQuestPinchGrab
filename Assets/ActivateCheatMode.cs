@@ -13,7 +13,7 @@ public class ActivateCheatMode : MonoBehaviour
 
 
     [SerializeField]
-    private ThrowGameSO throwGameManager;
+    private GameManagerScript throwGameManager;
     public InteractableColorVisual button_visual;
 
     public void ToggleCheatMode(){
@@ -34,12 +34,12 @@ public class ActivateCheatMode : MonoBehaviour
 
     void OnEnable()
     {
-        throwGameManager.CheatModeChange.AddListener(ChangeButtonColor);
+        throwGameManager.OnCheatModeChange.AddListener(ChangeButtonColor);
     }
 
     void OnDisable()
     {
-        throwGameManager.CheatModeChange.RemoveListener(ChangeButtonColor);
+        throwGameManager.OnCheatModeChange.RemoveListener(ChangeButtonColor);
     }
 
     private void ChangeButtonColor(bool state){
