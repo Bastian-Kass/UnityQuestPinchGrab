@@ -86,7 +86,6 @@ public class GameBallManager : MonoBehaviour
         if(other.CompareTag("ThrowingZone")){
             //Obtaining the orthonormal vector to the initial velocity and the gravity on player's throw
             Ortonormal_to_direction = Vector3.Cross(new Vector3( _rigidbody.velocity.x, 0, _rigidbody.velocity.z), Physics.gravity).normalized;
-            Debug.Log(Ortonormal_to_direction.ToString());
             ThrownBall = true; 
         }
 
@@ -103,20 +102,12 @@ public class GameBallManager : MonoBehaviour
 
 
     private void FixedUpdate(){
-        var keybooard = Keyboard.current;
-        if (keybooard == null)
-            return; // No gamepad connected.
-
-        if (keybooard.spaceKey.wasPressedThisFrame)
-        {   
-            _rigidbody.velocity = new Vector3 (1f, 20f, -2f);
-        }
 
         // When an active and thrown ball stops moving: Desactivate it and calculate score
         if(ActiveBall && ThrownBall && throwGameManager.IsCheatMode){
 
             TargetCollisionManager[] targets = FindObjectsOfType<TargetCollisionManager>();
-            
+
             Vector3 sum_vector = new Vector3(0,0,0);
             int vector_count = 0;
 
@@ -146,7 +137,7 @@ public class GameBallManager : MonoBehaviour
 
         float forceMagnitud = 3 / distance.sqrMagnitude;
 
-        _rigidbody.AddForce(Ortonormal_to_direction * forceMagnitud);
+        _rigidbody.AddForce(  Vector3.Dot(distance.normalized, Ortonormal_to_direction) * forceMagnitud );
 
     }
 
