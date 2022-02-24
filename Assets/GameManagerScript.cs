@@ -40,9 +40,9 @@ public class GameManagerScript : MonoBehaviour
 
     public bool IsCheatMode
     {
-        get { return IsCheatMode; }
+        get { return _IsCheatMode; }
         private set {  
-            Physics.gravity = new Vector3(0, value? -5f: -9.81f , 0);
+            // Physics.gravity = new Vector3(0, value? -5f: -9.81f , 0);
             _IsCheatMode = value;  
             OnCheatModeChange.Invoke(value);
              }
@@ -148,7 +148,6 @@ public class GameManagerScript : MonoBehaviour
 
 
     private void FixUpdate(){
-        // 
         if(!ExistActiveBalls())
             CountFinalScore();
         
