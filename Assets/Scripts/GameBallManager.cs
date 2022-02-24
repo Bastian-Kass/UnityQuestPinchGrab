@@ -137,7 +137,7 @@ public class GameBallManager : MonoBehaviour
 
         float forceMagnitud = 3 / distance.sqrMagnitude;
 
-        _rigidbody.AddForce(  Vector3.Dot(distance.normalized, Ortonormal_to_direction) * forceMagnitud );
+        _rigidbody.AddForce(  Vector3.Project(distance.normalized, Ortonormal_to_direction) * - forceMagnitud );
 
     }
 
