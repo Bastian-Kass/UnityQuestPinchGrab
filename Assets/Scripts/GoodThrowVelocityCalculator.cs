@@ -560,7 +560,7 @@ public class GoodThrowVelocityCalculator :  MonoBehaviour, IVelocityCalculator
             }
 
             Pose referencePose;
-            if (!ThrowInputDevice.IsInputValid || !ThrowInputDevice.IsHighConfidence ||
+            if ( ThrowInputDevice == null || !ThrowInputDevice.IsInputValid || !ThrowInputDevice.IsHighConfidence ||
                 !ThrowInputDevice.GetRootPose(out referencePose))
             {
                 return;

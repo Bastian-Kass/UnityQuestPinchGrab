@@ -393,9 +393,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9e17ab47e49825459b8201ebb003537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rigidbody: {fileID: 0}
+  _initial_position: {x: 0, y: 0, z: 0}
   throwGameManager: {fileID: 11400000, guid: 32987476149e54740b222f2efc65c572, type: 2}
-  handGrabInteractable: {fileID: 2990253896905474491}
-  ActiveArea: {fileID: 0}
+  ActiveBall: 1
+  ThrownBall: 0
   text_debug: {fileID: 0}
 --- !u!1 &2990253898964943413
 GameObject:

@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
-
+using Oculus.Interaction;
 public class TargetCollisionManager : MonoBehaviour
 {
     [SerializeField]
     public GameManagerScript throwGameManager;
 
-    public Rigidbody _rigidbody;
+    [SerializeField]
+    public AudioTrigger triggerScript;
+
+
+    public Rigidbody _rigidbody { get; private set; }
     private Vector3 _initial_position;
     private Quaternion _initial_rotation;
 
@@ -68,6 +72,9 @@ public class TargetCollisionManager : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        // Need more sound effects to randomize
+        if(triggerScript != null)
+            triggerScript.PlayAudio();
 
         // An active-thrown ball that collisions with a GameTarget adds to the score-list
         if(collision.gameObject.CompareTag("GameBall") && InTargetZone){
@@ -84,6 +91,9 @@ public class TargetCollisionManager : MonoBehaviour
 
                 // Temporary score just to show change to the user -> final one is recalculated at the end
                 throwGameManager.addToScore((int)magnitud);
+
+
+                SetDebug(magnitud.ToString());
             }
 
         }

@@ -80,6 +80,16 @@ public class GameBallManager : MonoBehaviour
 
     // }
 
+    void OnCollisionStay(Collision collision)
+    {
+
+        // Re initializing ball when fallen to the ground(Wooden pallet)
+        if(collision.gameObject.CompareTag("Respawn") && ActiveBall)
+            InitTarget();
+
+        
+    }
+
     void OnTriggerExit(Collider other)
     {
         //Ball is flagges as thrown when it leaves the throwing area
