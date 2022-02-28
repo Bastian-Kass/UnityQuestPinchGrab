@@ -390,6 +390,28 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 5e719809323baf545ab338e3ce56ebcc,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 5e719809323baf545ab338e3ce56ebcc,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8727524d988907943a6b25d483ce8bbf, type: 2}
+    - target: {fileID: -7635826562936255635, guid: 5e719809323baf545ab338e3ce56ebcc,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: -6388254203272786494, guid: 5e719809323baf545ab338e3ce56ebcc,
+        type: 3}
+    - target: {fileID: -7635826562936255635, guid: 5e719809323baf545ab338e3ce56ebcc,
+        type: 3}
+      propertyPath: m_Materials.Array.data[3]
+      value: 
+      objectReference: {fileID: -6388254203272786494, guid: 5e719809323baf545ab338e3ce56ebcc,
+        type: 3}
     - target: {fileID: 919132149155446097, guid: 5e719809323baf545ab338e3ce56ebcc,
         type: 3}
       propertyPath: m_Name
@@ -416,6 +438,12 @@ GameObject:
 --- !u!4 &9126453476171395374 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5e719809323baf545ab338e3ce56ebcc,
+    type: 3}
+  m_PrefabInstance: {fileID: 8731657691009537733}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8008821096681774504 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7635826562936255635, guid: 5e719809323baf545ab338e3ce56ebcc,
     type: 3}
   m_PrefabInstance: {fileID: 8731657691009537733}
   m_PrefabAsset: {fileID: 0}
@@ -463,4 +491,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   throwGameManager: {fileID: 11400000, guid: 32987476149e54740b222f2efc65c572, type: 2}
   triggerScript: {fileID: 2377366652315119119}
+  _renderer: {fileID: 8008821096681774504}
   text: {fileID: 2437030403314273159}

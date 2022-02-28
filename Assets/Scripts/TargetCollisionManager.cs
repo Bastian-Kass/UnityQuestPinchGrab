@@ -16,6 +16,14 @@ public class TargetCollisionManager : MonoBehaviour
     public UnityEvent<int> OnTargetHit;
 
     public Rigidbody _rigidbody { get; private set; }
+
+    [SerializeField]
+    public Renderer _renderer;
+    private Material _material;
+
+    private Color _active_color;
+    private Color _inactive_color;
+
     private Vector3 _initial_position;
     private Quaternion _initial_rotation;
 
@@ -39,9 +47,15 @@ public class TargetCollisionManager : MonoBehaviour
         _initial_rotation = gameObject.transform.rotation;
 
         _rigidbody = gameObject.GetComponent<Rigidbody>();
+
+        _active_color = new Color(1f,0f,0f, 1f);
+        _inactive_color = new Color(.4f,.4f,.4f, 1f);
+
+        _material = _renderer.materials[1];
     }
 
     public void InitTarget(){
+        _material.color = _active_color;
         //Removing velicty when positioning
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
@@ -57,11 +71,13 @@ public class TargetCollisionManager : MonoBehaviour
         HitMagnituds.Clear();
     }
 
-
-    private void onTriggerExit(Collider other){
-        if(other.CompareTag("TargetZone"))
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.CompareTag("TargetZone")){
             InTargetZone = false;
-    }   
+            _material.color = _inactive_color;
+        } 
+    }
 
 
 

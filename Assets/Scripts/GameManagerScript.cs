@@ -170,7 +170,7 @@ public class GameManagerScript : MonoBehaviour
 
         // Reseting common game variables
         TotalScore = 0;
-        
+
     }
 
 
