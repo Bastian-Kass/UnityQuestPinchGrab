@@ -1,21 +1,19 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using TMPro;
-using UnityEngine.InputSystem;
 
 
+
+// Script has run priority
 [DefaultExecutionOrder(-5)]
 public class GameManagerScript : MonoBehaviour
 {
-    [SerializeField]
-    TextMeshPro score;
 
     // --------- Score variables ------------
-    [SerializeField]
+    [SerializeField, HideInInspector]
     private int _TotalScore = 0;
 
+    [HideInInspector]
     public int TotalScore
     {
         get { return _TotalScore; }
@@ -32,42 +30,24 @@ public class GameManagerScript : MonoBehaviour
         TotalScore += amount;
     }
 
-    // --------- Cheat mode variables ------------
-    [SerializeField]
-    private bool _IsCheatMode = false;
-
-    [System.NonSerialized]
-    public UnityEvent<bool> OnCheatModeChange;
-
-    public bool IsCheatMode
-    {
-        get { return _IsCheatMode; }
-        private set {  
-            Physics.gravity = new Vector3(0, value? -5f: -9.81f , 0);
-            _IsCheatMode = value;  
-            Debug.Log("Cheat mode:" + _IsCheatMode.ToString());
-            OnCheatModeChange.Invoke(_IsCheatMode);
-             }
-    }    
-
-    public void ToggleCheatMode(){
-        IsCheatMode = !IsCheatMode;
-    }
-
-
     // --------- Bootstrap game ------------
     private void Start(){
-        BootstrapGame(true);
+        BootstrapGame();
     }
 
+    private void FixUpdate(){
+        // Checking for active balls -> Game finishes when there are none
+        // TODO: Check efficiency of checking this way, making balls invoke an event and counting the events to mark a finished game
+        if(GameState == GameStateType.PlayerThrowing && AreAllBallsInactive())
+            CountFinalScore();
+        
+    }
 
     //--------- Scene game states ------------
     public enum GameStateType  
     {
         Awake,
         Bootstrap,
-        PlayerIdle,
-        PlayerGrabbing,
         PlayerThrowing,
         FinishGame,
     }
@@ -80,10 +60,7 @@ public class GameManagerScript : MonoBehaviour
     public GameStateType GameState
     {
         get { return _GameState; }
-        set {
-            _GameState = value;
-            OnChangeGameState.Invoke(value);
-        }
+        set { _GameState = value; OnChangeGameState.Invoke(value); }
     }
 
     private void OnEnable (){
@@ -98,31 +75,21 @@ public class GameManagerScript : MonoBehaviour
     }
 
     //--------- Reference to Gametargets ------------
-
-    private List<TargetCollisionManager> _GameTargets;
-
-    public List<TargetCollisionManager> GameTargets {
-        get {return _GameTargets; }
-        private set { _GameTargets = value;}
-    }
+    public List<TargetCollisionManager> GameTargets { get; private set; }
 
     private List<int> HitScoresList = new List<int>();
 
-    public void AddHitScore(int score){
-        HitScoresList.Add(score);
+    private void InitGameTargets(){
 
-    }
-
-    private List<TargetCollisionManager> InitGameTargets(){
-
+        // Clearing previous score list
         HitScoresList.Clear();
 
-        //Removing previous listeners, if any
+        // Removing previous listeners, if any
         if(GameTargets != null && GameTargets.Count > 0)
             foreach(TargetCollisionManager t in  GameTargets)
                 t.OnTargetHit.RemoveListener(OnTargetBeingHit);
                 
-
+        // Referencing game targets and adding listener to each
         GameTargets = new List<TargetCollisionManager>(FindObjectsOfType<TargetCollisionManager>());
 
         foreach(TargetCollisionManager t in  GameTargets){
@@ -130,37 +97,36 @@ public class GameManagerScript : MonoBehaviour
             if(t.OnTargetHit != null)
                 t.OnTargetHit.AddListener(OnTargetBeingHit);
         }
-            
-        
-        return GameTargets;
     }
 
-    private void OnTargetBeingHit(int value){
-        HitScoresList.Add(value);
-    }
+    private void OnTargetBeingHit(Collision collision){
 
-    public List<TargetCollisionManager> GetActiveTargets(){
-        return GameTargets.FindAll(e => e.InTargetZone);
+        //Calculating the Hit Score
+        int mag = (int)(collision.relativeVelocity.sqrMagnitude * 20);
+        HitScoresList.Add(mag);
+
+        addToScore(mag);
     }
 
     //--------- Reference to Game Balls ------------
-    private List<GameBallManager> _GameBalls;
-
-    public List<GameBallManager> GameBalls {
-        get {return _GameBalls; }
-        private set { _GameBalls = value;}
-    }
+    public List<GameBallManager> GameBalls { get; private set; }
 
     private List<GameBallManager> InitGameBalls(){
+
+        //Other logic that might come in handy when initializing the game throwing objects
+        // ...
+
         GameBalls = new List<GameBallManager>(FindObjectsOfType<GameBallManager>());
         return GameBalls;
     }
 
-    private bool ExistActiveBalls(){
-        return GameBalls.Find(e => e.ActiveBall);
+    private bool AreAllBallsInactive(){
+        return (GameBalls.FindIndex(e => e.ActiveBall) == -1);
     }
-    
-    public void BootstrapGame( bool hardBootstrap = false){
+
+
+    // ------- General Functions ------
+    public void BootstrapGame(){
         // --- Signal bootstrap start ---
         GameState = GameStateType.Bootstrap;
 
@@ -170,23 +136,10 @@ public class GameManagerScript : MonoBehaviour
 
         // Reseting common game variables
         TotalScore = 0;
+        HitScoresList.Clear();
 
-    }
-
-
-
-
-    private void FixUpdate(){
-        if(!ExistActiveBalls())
-            CountFinalScore();
-        
-    var keybooard = Keyboard.current;
-    if (keybooard != null && keybooard.spaceKey.wasPressedThisFrame)
-        {
-            Debug.Log("Spacebar action");
-            ToggleCheatMode();
-
-        }
+        // Following the game state logic
+        GameState = GameStateType.PlayerThrowing;
     }
 
     private void CountFinalScore(){
@@ -197,6 +150,31 @@ public class GameManagerScript : MonoBehaviour
         TotalScore = score;
 
         GameState = GameStateType.FinishGame;
+    }
+
+    // --------- Cheat mode variables ------------
+
+
+    [SerializeField, HideInInspector]
+    private bool _IsCheatMode = false;
+    [SerializeField, Range(-5f, -9.81f)]
+    public float CheatGravity = -9.81f;
+
+    [System.NonSerialized]
+    public UnityEvent<bool> OnCheatModeChange;
+
+    public bool IsCheatMode
+    {
+        get { return _IsCheatMode; }
+        private set {  
+            Physics.gravity = new Vector3(0, CheatGravity , 0);
+            _IsCheatMode = value; 
+            OnCheatModeChange.Invoke(_IsCheatMode);
+            }
+    }    
+
+    public void ToggleCheatMode(){
+        IsCheatMode = !IsCheatMode;
     }
 
 }
