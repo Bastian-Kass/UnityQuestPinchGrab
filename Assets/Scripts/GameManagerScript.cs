@@ -106,13 +106,37 @@ public class GameManagerScript : MonoBehaviour
         private set { _GameTargets = value;}
     }
 
+    private List<int> HitScoresList = new List<int>();
+
+    public void AddHitScore(int score){
+        HitScoresList.Add(score);
+
+    }
+
     private List<TargetCollisionManager> InitGameTargets(){
+
+        HitScoresList.Clear();
+
+        //Removing previous listeners, if any
+        if(GameTargets != null && GameTargets.Count > 0)
+            foreach(TargetCollisionManager t in  GameTargets)
+                t.OnTargetHit.RemoveListener(OnTargetBeingHit);
+                
+
         GameTargets = new List<TargetCollisionManager>(FindObjectsOfType<TargetCollisionManager>());
 
-        foreach(TargetCollisionManager t in  GameTargets)
+        foreach(TargetCollisionManager t in  GameTargets){
             t.InitTarget();
+            if(t.OnTargetHit != null)
+                t.OnTargetHit.AddListener(OnTargetBeingHit);
+        }
+            
         
         return GameTargets;
+    }
+
+    private void OnTargetBeingHit(int value){
+        HitScoresList.Add(value);
     }
 
     public List<TargetCollisionManager> GetActiveTargets(){
@@ -146,7 +170,10 @@ public class GameManagerScript : MonoBehaviour
 
         // Reseting common game variables
         TotalScore = 0;
+        
     }
+
+
 
 
     private void FixUpdate(){

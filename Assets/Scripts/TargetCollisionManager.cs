@@ -12,6 +12,8 @@ public class TargetCollisionManager : MonoBehaviour
     [SerializeField]
     public AudioTrigger triggerScript;
 
+    [System.NonSerialized]
+    public UnityEvent<int> OnTargetHit;
 
     public Rigidbody _rigidbody { get; private set; }
     private Vector3 _initial_position;
@@ -26,23 +28,12 @@ public class TargetCollisionManager : MonoBehaviour
         private set { _InTargetZone = value; }
     }
 
-    // void OnEnable()
-    // {
-    //     throwGameManager.OnChangeGameState.AddListener(RestartPosition);
-    // }
+    void OnEnable()
+    {
+        if (OnTargetHit == null)
+            OnTargetHit = new UnityEvent<int>();
+    }
 
-    // void OnDisable()
-    // {
-    //     throwGameManager.OnChangeGameState.RemoveListener(RestartPosition);
-    // }
-
-    // private void RestartPosition(GameManagerScript.GameStateType state){
-    //     // On game signaling Bootstrap, Initializing target to its original values
-    //     if(state == GameManagerScript.GameStateType.Bootstrap)
-    //         InitTarget();
-    // }
-
-    
     private void Awake(){
         _initial_position = gameObject.transform.position;
         _initial_rotation = gameObject.transform.rotation;
@@ -51,6 +42,10 @@ public class TargetCollisionManager : MonoBehaviour
     }
 
     public void InitTarget(){
+        //Removing velicty when positioning
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
+
         // Reset to initial position and rotation
         gameObject.transform.position = _initial_position;
         gameObject.transform.rotation = _initial_rotation;
@@ -72,9 +67,7 @@ public class TargetCollisionManager : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // Need more sound effects to randomize
-        // if(triggerScript != null)
-        //     triggerScript.PlayAudio();
+
 
         // An active-thrown ball that collisions with a GameTarget adds to the score-list
         if(collision.gameObject.CompareTag("GameBall") && InTargetZone){
@@ -97,6 +90,10 @@ public class TargetCollisionManager : MonoBehaviour
             }
 
         }
+
+        // Need more sound effects to randomize
+        if(triggerScript != null && collision.relativeVelocity.sqrMagnitude >= 2)
+            triggerScript.PlayAudio();
     }
 
     public int CalculateTargetScore(){

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using System.Collections;
+using Oculus.Interaction;
 
 public class GameBallManager : MonoBehaviour
 {
@@ -10,16 +11,28 @@ public class GameBallManager : MonoBehaviour
     private Quaternion _initial_rotation;
 
     [SerializeField]
+    public float CheatModePower = 5;
+
+    
+
+
+    [SerializeField]
     private GameManagerScript throwGameManager;
 
     // Maybe will need at certain point
     // public HandGrabInteractable handGrabInteractable;
 
-
+    
     public bool ActiveBall = true;
     public bool ThrownBall = false;
 
     private Vector3 Ortonormal_to_direction;
+
+    [SerializeField]
+    public AudioTrigger triggerScript_collision;
+
+    [SerializeField]
+    public AudioTrigger triggerScript_flyingball;
 
     void OnEnable()
     {
@@ -46,10 +59,14 @@ public class GameBallManager : MonoBehaviour
     }
 
     public void InitTarget(){
+        //Making it not move when reseting!!
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
+
         //Reseting the object to the initial position
         gameObject.transform.position = _initial_position;
         gameObject.transform.rotation = _initial_rotation;
-
+        
         //Setting as active
         ActiveBall = true;
         ThrownBall = false;
@@ -90,6 +107,11 @@ public class GameBallManager : MonoBehaviour
         
     }
 
+    void OnCollisionEnter(Collision collision){
+        if(triggerScript_collision != null && collision.relativeVelocity.sqrMagnitude > 1.5)
+            triggerScript_collision.PlayAudio();
+    }
+
     void OnTriggerExit(Collider other)
     {
         //Ball is flagges as thrown when it leaves the throwing area
@@ -97,6 +119,13 @@ public class GameBallManager : MonoBehaviour
             //Obtaining the orthonormal vector to the initial velocity and the gravity on player's throw
             Ortonormal_to_direction = Vector3.Cross(new Vector3( _rigidbody.velocity.x, 0, _rigidbody.velocity.z), Physics.gravity).normalized;
             ThrownBall = true; 
+        
+            /* TODO: To trigger the 'Swish' flying ball audio, this should listen for
+                the "PointerEvent" 'Unselect' from the OVR-ONHandGrabEvent [See commente OnHandGrabEvent code above]
+                Will leave like this for the time being
+             */
+            if(triggerScript_flyingball != null)
+                triggerScript_flyingball.PlayAudio();
         }
 
         if(other.CompareTag("GameBounds")){
@@ -145,7 +174,7 @@ public class GameBallManager : MonoBehaviour
 
         
 
-        float forceMagnitud = 3 / distance.sqrMagnitude;
+        float forceMagnitud = CheatModePower / distance.sqrMagnitude;
 
         _rigidbody.AddForce(  Vector3.Project(distance.normalized, Ortonormal_to_direction) * - forceMagnitud );
 
