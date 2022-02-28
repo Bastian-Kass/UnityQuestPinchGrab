@@ -73,8 +73,8 @@ public class TargetCollisionManager : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         // Need more sound effects to randomize
-        if(triggerScript != null)
-            triggerScript.PlayAudio();
+        // if(triggerScript != null)
+        //     triggerScript.PlayAudio();
 
         // An active-thrown ball that collisions with a GameTarget adds to the score-list
         if(collision.gameObject.CompareTag("GameBall") && InTargetZone){
