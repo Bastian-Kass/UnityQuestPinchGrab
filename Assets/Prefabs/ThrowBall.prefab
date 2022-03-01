@@ -397,8 +397,9 @@ MonoBehaviour:
   _rigidbody: {fileID: 2990253898837520008}
   CheatModePower: 5
   triggerScript_flyingball: {fileID: 6089209377858612547}
-  AudioCollision_Threshold: 2
+  AudioCollision_Threshold: 3.01
   triggerScript_collision: {fileID: 7539966386250756757}
+  ballMaterial: {fileID: 2100000, guid: 1503107b5718f194784263a6beeb1ecc, type: 2}
 --- !u!1 &2990253898964943413
 GameObject:
   m_ObjectHideFlags: 0

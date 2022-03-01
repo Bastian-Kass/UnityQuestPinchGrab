@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
+using TMPro;
 
 
 // Script has run priority
 [DefaultExecutionOrder(-5)]
 public class GameManagerScript : MonoBehaviour
 {
+
+    public TextMeshPro debug_text;
 
     // --------- Score variables ------------
     [SerializeField, HideInInspector]
@@ -26,6 +28,12 @@ public class GameManagerScript : MonoBehaviour
     [System.NonSerialized]
     public UnityEvent<int> OnScoreChange;
 
+    // ---- Audio source management ----
+    [SerializeField]
+    public AudioSource winSoundAudio;
+    [SerializeField]
+    public AudioSource loseSoundAudio;
+
     public void addToScore(int amount){
         TotalScore += amount;
     }
@@ -35,11 +43,13 @@ public class GameManagerScript : MonoBehaviour
         BootstrapGame();
     }
 
-    private void FixUpdate(){
+    private void FixedUpdate(){
         // Checking for active balls -> Game finishes when there are none
         // TODO: Check efficiency of checking this way, making balls invoke an event and counting the events to mark a finished game
         if(GameState == GameStateType.PlayerThrowing && (AreAllTargetsHit() || AreAllBallsInactive()))
             CountFinalScore();
+
+        debug_text.SetText( GameState.ToString() + '\n' + "Target Hit:" + AreAllTargetsHit().ToString() + "\n Used Balls:" + AreAllBallsInactive().ToString());
         
     }
 
@@ -109,7 +119,7 @@ public class GameManagerScript : MonoBehaviour
     }
 
     private bool AreAllTargetsHit(){
-        return GameTargets.FindIndex(e => e.InTargetZone) == -1;
+        return (GameTargets.FindIndex(e => e.InTargetZone) == -1);
     }
 
     //--------- Reference to Game Balls ------------
@@ -165,6 +175,11 @@ public class GameManagerScript : MonoBehaviour
         // Setting the final score!
         TotalScore = score;
 
+        if(score != 0)
+            winSoundAudio.Play();
+        else    
+            loseSoundAudio.Play();
+
         GameState = GameStateType.FinishGame;
     }
 
@@ -192,5 +207,8 @@ public class GameManagerScript : MonoBehaviour
     public void ToggleCheatMode(){
         IsCheatMode = !IsCheatMode;
     }
+
+
+
 
 }

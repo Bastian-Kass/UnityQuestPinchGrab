@@ -13,9 +13,21 @@ public class GameBallManager : MonoBehaviour
     private Vector3 _initial_position;
     private Quaternion _initial_rotation;
 
+    private bool _ActiveBall = false;
 
-
-    public bool ActiveBall { get; private set; }
+    public bool ActiveBall
+       {
+       get { return _ActiveBall; }
+       set 
+       {
+           _ActiveBall = value;
+           if(_material != null){
+                _material.color = value? Color.white: Color.black;
+           }
+                
+       }
+   }
+    
     public bool ThrownBall { get; private set; }
 
     [SerializeField, Range(5, 10)]
@@ -31,6 +43,8 @@ public class GameBallManager : MonoBehaviour
     public float AudioCollision_Threshold = 2;
     [SerializeField]
     public AudioTrigger triggerScript_collision;
+
+    private Material _material;
 
     void OnEnable()
     {
@@ -54,6 +68,7 @@ public class GameBallManager : MonoBehaviour
         _initial_rotation = gameObject.transform.rotation;
 
         Ortonormal_to_direction = new Vector3();
+        _material = gameObject.GetComponentInChildren<Renderer>().material;
     }
 
     public void Initialize(){
@@ -127,10 +142,11 @@ public class GameBallManager : MonoBehaviour
     }
 
     IEnumerator BallOutOfBounds(){
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
         // TODO: Might want to show the ball as grey
         // TODO: Determine if it is better to have this time threshold outside a play-area or if it would be better to use a CollisionStay Approach
         ActiveBall = false; 
+        
     }
 
 
