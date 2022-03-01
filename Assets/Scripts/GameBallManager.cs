@@ -137,15 +137,16 @@ public class GameBallManager : MonoBehaviour
 
         // Detect if the ball left the play-area, in which case, after x seconds, will be flagged as Inactive [ActiveBall = false]
         if(other.CompareTag("GameBounds")){
-            StartCoroutine(BallOutOfBounds());
+            StartCoroutine(BallOutOfBounds(other));
         }
     }
 
-    IEnumerator BallOutOfBounds(){
+    IEnumerator BallOutOfBounds(Collider other){
         yield return new WaitForSeconds(1);
-        // TODO: Might want to show the ball as grey
-        // TODO: Determine if it is better to have this time threshold outside a play-area or if it would be better to use a CollisionStay Approach
-        ActiveBall = false; 
+        //After the one minute wait, we only change it to inactive if it is still out of the zone
+        // [Maybe the user restarts the game in between this time]
+        if(!other.bounds.Contains(transform.position))
+            ActiveBall = false; 
         
     }
 

@@ -48,9 +48,6 @@ public class GameManagerScript : MonoBehaviour
         // TODO: Check efficiency of checking this way, making balls invoke an event and counting the events to mark a finished game
         if(GameState == GameStateType.PlayerThrowing && (AreAllTargetsHit() || AreAllBallsInactive()))
             CountFinalScore();
-
-        debug_text.SetText( GameState.ToString() + '\n' + "Target Hit:" + AreAllTargetsHit().ToString() + "\n Used Balls:" + AreAllBallsInactive().ToString());
-        
     }
 
     //--------- Scene game states ------------
