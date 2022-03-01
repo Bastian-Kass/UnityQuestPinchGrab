@@ -38,7 +38,7 @@ public class GameManagerScript : MonoBehaviour
     private void FixUpdate(){
         // Checking for active balls -> Game finishes when there are none
         // TODO: Check efficiency of checking this way, making balls invoke an event and counting the events to mark a finished game
-        if(GameState == GameStateType.PlayerThrowing && AreAllBallsInactive())
+        if(GameState == GameStateType.PlayerThrowing && (AreAllTargetsHit() || AreAllBallsInactive()))
             CountFinalScore();
         
     }
@@ -108,6 +108,10 @@ public class GameManagerScript : MonoBehaviour
         addToScore(mag);
     }
 
+    private bool AreAllTargetsHit(){
+        return GameTargets.FindIndex(e => e.InTargetZone) == -1;
+    }
+
     //--------- Reference to Game Balls ------------
     public List<GameBallManager> GameBalls { get; private set; }
 
@@ -144,16 +148,28 @@ public class GameManagerScript : MonoBehaviour
 
     private void CountFinalScore(){
         int score = 0;
+        // Adding to the score the distance of each can
         foreach (TargetCollisionManager gt in GameTargets)
             score += gt.CalculateTargetScore();
+
+        // Bonus for balls not used!
+        foreach( GameBallManager gb in GameBalls){
+            if(!gb.ThrownBall)
+                score += 5000;
+        }
+
+        // Adding to score for each hit and how powerfull it was (magnitud)
+        foreach( int n in HitScoresList)
+            score += n;
         
+        // Setting the final score!
         TotalScore = score;
 
         GameState = GameStateType.FinishGame;
     }
 
-    // --------- Cheat mode variables ------------
 
+    // --------- Cheat mode variables ------------
 
     [SerializeField, HideInInspector]
     private bool _IsCheatMode = false;

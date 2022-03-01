@@ -1,61 +1,65 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Events;
-using TMPro;
 using Oculus.Interaction;
 public class TargetCollisionManager : MonoBehaviour
 {
-    [SerializeField]
-    public GameManagerScript throwGameManager;
-
-    [SerializeField]
-    public AudioTrigger triggerScript;
 
     [System.NonSerialized]
-    public UnityEvent<int> OnTargetHit;
+    public UnityEvent<Collision> OnTargetHit;
 
-    public Rigidbody _rigidbody { get; private set; }
+    public bool InTargetZone { get; private set; }
 
-    [SerializeField]
-    public Renderer _renderer;
-    private Material _material;
-
-    private Color _active_color;
-    private Color _inactive_color;
-
+    private Rigidbody _rigidbody;
     private Vector3 _initial_position;
     private Quaternion _initial_rotation;
 
-    private List<float> HitMagnituds = new List<float>();
+    [Header("Visual feedback settings")]
+    [SerializeField]
+    public Renderer _renderer;
+    private Material _material;
+    private Color _active_color;
+    private Color _inactive_color;
+    public int ActiveMaterialPosition = 2;
 
-    private bool _InTargetZone = true;
-    
-    public bool InTargetZone {
-        get {return _InTargetZone; }
-        private set { _InTargetZone = value; }
-    }
+    [Header("Audio on collision settings")]
+    [SerializeField]
+    public AudioTrigger AudioTriggerScript;
+    [SerializeField, Range(0, 10)]
+    public float AudioCollision_Threshold = 2;
+
+    [Header("Game score settings")]
+    [SerializeField]
+    public int ScoreMultiplier_Distance = 20;
 
     void OnEnable()
     {
         if (OnTargetHit == null)
-            OnTargetHit = new UnityEvent<int>();
+            OnTargetHit = new UnityEvent<Collision>();
     }
 
     private void Awake(){
+        // Getting variables from the target's start position
+        _rigidbody = gameObject.GetComponent<Rigidbody>();
+
         _initial_position = gameObject.transform.position;
         _initial_rotation = gameObject.transform.rotation;
 
-        _rigidbody = gameObject.GetComponent<Rigidbody>();
-
+        // TODO: We would be able to set these public and change them on editor
         _active_color = new Color(1f,0f,0f, 1f);
         _inactive_color = new Color(.4f,.4f,.4f, 1f);
 
-        _material = _renderer.materials[1];
+        // NOTE: material at position 1 is the red material on the can target
+        Material[] materials = _renderer.materials;
+
+        //Just making sure nothing break if material does not exist
+        if(materials.Length >= ActiveMaterialPosition)
+            _material = materials[ActiveMaterialPosition-1];
+        else if(materials.Length >= 1)
+            _material = materials[0];
     }
 
     public void InitTarget(){
-        _material.color = _active_color;
         //Removing velicty when positioning
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
@@ -67,67 +71,54 @@ public class TargetCollisionManager : MonoBehaviour
         //Set as active
         InTargetZone = true;
 
-        //Cumulative score reset
-        HitMagnituds.Clear();
+        // Set Feedback color
+        _material.color = _active_color;
     }
 
     private void OnTriggerExit(Collider other)
     {
         if(other.CompareTag("TargetZone")){
             InTargetZone = false;
+            //Coloring the target as inactive
             _material.color = _inactive_color;
         } 
     }
 
-
-
     void OnCollisionEnter(Collision collision)
     {
-
 
         // An active-thrown ball that collisions with a GameTarget adds to the score-list
         if(collision.gameObject.CompareTag("GameBall") && InTargetZone){
 
-            //TODO: Draw some sort of "Pow" Onomatopeya
 
-            //TODO: Play sounds [Empty can when not InTargetZone, better sound when InTargetZone]
-
+            // Getting the collision, and only triggering if the ball is active
+            // [Eg. Ignoring balls on the ground that get hit by a falling can]
             GameBallManager ball = collision.gameObject.GetComponent<GameBallManager>();
 
-            if(ball.ActiveBall){
-                float magnitud = collision.relativeVelocity.sqrMagnitude;
-                HitMagnituds.Add(magnitud);
-
-                // Temporary score just to show change to the user -> final one is recalculated at the end
-                throwGameManager.addToScore((int)magnitud);
-
-
-                SetDebug(magnitud.ToString());
-            }
+            if(ball.ActiveBall)
+                OnTargetHit.Invoke(collision);
+            
 
         }
 
         // Need more sound effects to randomize
-        if(triggerScript != null && collision.relativeVelocity.sqrMagnitude >= 2)
-            triggerScript.PlayAudio();
+        // TODO: Get the propoer value programatically for the audio to trigger, now using 2
+        // TODO: Get more audios randomze and add varity
+        if(AudioTriggerScript != null && collision.relativeVelocity.sqrMagnitude >= AudioCollision_Threshold)
+            AudioTriggerScript.PlayAudio();
     }
 
     public int CalculateTargetScore(){
         int score = 0;
-        foreach (float m in HitMagnituds)
-            score += (int)(m * 1000);
 
-        score += (int)( ( transform.position - _initial_position).sqrMagnitude * 20);
+        score += (int)( ( transform.position - _initial_position).sqrMagnitude * ScoreMultiplier_Distance);
         return score;
     }
 
-    // --- Debug Text Gameobject ---
-
-    [SerializeField]
-    public  TextMeshPro text;
-
-    public void SetDebug(string s){
-        text.SetText(s);
+    // --------- Misc ------------
+    public Rigidbody GetRigidbody (){
+        return _rigidbody;
     }
+
 
 }

@@ -1,48 +1,46 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
-using TMPro;
 using System.Collections;
 using Oculus.Interaction;
 
 public class GameBallManager : MonoBehaviour
 {
+
+    [SerializeField]
+    private GameManagerScript GameManager;
+
+
     public Rigidbody _rigidbody;
-    public Vector3 _initial_position;
+    private Vector3 _initial_position;
     private Quaternion _initial_rotation;
 
-    [SerializeField]
+
+
+    public bool ActiveBall { get; private set; }
+    public bool ThrownBall { get; private set; }
+
+    [SerializeField, Range(5, 10)]
     public float CheatModePower = 5;
-
-    
-
-
-    [SerializeField]
-    private GameManagerScript throwGameManager;
-
-    // Maybe will need at certain point
-    // public HandGrabInteractable handGrabInteractable;
-
-    
-    public bool ActiveBall = true;
-    public bool ThrownBall = false;
-
     private Vector3 Ortonormal_to_direction;
 
-    [SerializeField]
-    public AudioTrigger triggerScript_collision;
+
 
     [SerializeField]
     public AudioTrigger triggerScript_flyingball;
 
+    [SerializeField, Range(0, 10)]
+    public float AudioCollision_Threshold = 2;
+    [SerializeField]
+    public AudioTrigger triggerScript_collision;
+
     void OnEnable()
     {
-        throwGameManager.OnChangeGameState.AddListener(RestartPosition);
+        GameManager.OnChangeGameState.AddListener(RestartPosition);
         // handGrabInteractable.OnPointerEvent += OnHandGrabEvent;
     }
 
     void OnDisable()
     {
-        throwGameManager.OnChangeGameState.RemoveListener(RestartPosition);
+        GameManager.OnChangeGameState.RemoveListener(RestartPosition);
         // handGrabInteractable.OnPointerEvent -= OnHandGrabEvent;
     }
 
@@ -58,7 +56,7 @@ public class GameBallManager : MonoBehaviour
         Ortonormal_to_direction = new Vector3();
     }
 
-    public void InitTarget(){
+    public void Initialize(){
         //Making it not move when reseting!!
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
@@ -76,8 +74,129 @@ public class GameBallManager : MonoBehaviour
     private void RestartPosition(GameManagerScript.GameStateType state){
         // On game signaling Bootstrap, Initializing target to its original values
         if(state == GameManagerScript.GameStateType.Bootstrap)
-            InitTarget();
+            Initialize();
     }
+
+
+
+    void OnCollisionStay(Collision collision)
+    {
+         
+        //Active balls that have not been thrown, respawn after staying collisioning 
+        // with the wooden palet below
+        if(ActiveBall && !ThrownBall && collision.gameObject.CompareTag("Respawn"))
+            Initialize();
+
+
+        // TODO: Investigate -> efficiency of OnTriggerExit( defined Gamebounds ) VS OnCollisionStay( with any object other tahn the defined ones [respawn, hands, other balls] )
+         
+    }
+
+    void OnCollisionEnter(Collision collision){
+        //TODO: Determine a proper magnitud to signal colission sound (ping pong ball sound)
+        if(triggerScript_collision != null && collision.relativeVelocity.sqrMagnitude > AudioCollision_Threshold)
+            triggerScript_collision.PlayAudio();
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        //Ball flagged as thrown when it leaves the throwing area
+        if(other.CompareTag("ThrowingZone")){
+            /*
+                Calculating the orthonormal vector of the thrown ball (direction x gravity)
+                This will be used in the cheatmode since the ball will only correct direction in that axis:
+                  YES > The ball WILL  apply a force in this perpendicular vector
+                  NO  > The ball will not accelerate towards the target in in front/back of it
+                  NO  > The ball will not accelerate towards the target below above it
+                - Only the initial orthonmal vector is neded ( this is not calculated continualy in the update method )
+
+            */
+            //Obtaining the orthonormal vector orthonormal from gravity (up/down) and the initial direction in the x.z plane axis [we use the velocity on x,y of the initial velocity]
+            Ortonormal_to_direction = Vector3.Cross(new Vector3( _rigidbody.velocity.x, 0, _rigidbody.velocity.z), Physics.gravity).normalized;
+            ThrownBall = true; 
+        
+            // Pragmatically, we can trigger the effect sound of the ball swishing when it leaves the throw-area
+            if(triggerScript_flyingball != null)
+                triggerScript_flyingball.PlayAudio();
+        }
+
+        // Detect if the ball left the play-area, in which case, after x seconds, will be flagged as Inactive [ActiveBall = false]
+        if(other.CompareTag("GameBounds")){
+            StartCoroutine(BallOutOfBounds());
+        }
+    }
+
+    IEnumerator BallOutOfBounds(){
+        yield return new WaitForSeconds(3);
+        // TODO: Might want to show the ball as grey
+        // TODO: Determine if it is better to have this time threshold outside a play-area or if it would be better to use a CollisionStay Approach
+        ActiveBall = false; 
+    }
+
+
+    private void FixedUpdate(){
+
+        // When in cheatmode: a thown ball will be constantly attracted
+        if(ActiveBall && ThrownBall && GameManager.IsCheatMode){
+
+
+            //Get targets in the game
+            TargetCollisionManager[] targets = FindObjectsOfType<TargetCollisionManager>();
+
+            Vector3 sum_vector = new Vector3(0,0,0);
+            int vector_count = 0;
+
+            //Proceed to calculate a mean position of all targets [Will work as center of mass ]
+            foreach (TargetCollisionManager t in targets)
+                if(t.InTargetZone){
+                    vector_count ++;
+                    sum_vector += t.GetRigidbody().position;
+                }
+                    
+            // Attract the gameball to the calculated center of mass
+            if(vector_count > 0)
+                Attract(sum_vector/vector_count);
+            
+        }
+    }
+
+
+    void Attract (Vector3 meanTargetPosition){
+
+        // TODO:  -----    IMPORTANT  -------
+        /* There needs to be a maximum a constant velocity!!, 
+        /* we cannot only add the force or the ball accelarates too much and sends the cans flying like crazy
+        */ 
+
+
+        /* NOTE: This calculation is a rough simplification of the gravity formula
+            m1, m2 and gravity constant are swapped for a constant (cheat-mode-power) to have control over the attraction
+            since the formula determines the distance^2, we can directly know it by the sqrMagnitud of the distance vector
+            We finalize by adding the projected force into the orthonormal vector calculated on throw, and times the forceMagnitud
+        */
+        //TODO: Add graph explanation of these maths
+
+        // Distance vector of the center of mass of all the cans (mean position of the targets)
+        Vector3 distance = _rigidbody.position - meanTargetPosition;
+
+        float forceMagnitud = CheatModePower / distance.sqrMagnitude;
+
+        _rigidbody.AddForce(  Vector3.Project(distance.normalized, Ortonormal_to_direction) * - forceMagnitud );
+
+    }
+
+
+
+
+
+
+
+
+
+    //  ----- Not useful right now, I just dont want to lose the code to detect grab events ---
+    // Maybe will need at certain point
+    // public HandGrabInteractable handGrabInteractable;
+
 
     // private void OnHandGrabEvent(PointerArgs args){
     //     //Signaling the game that a ball has been grabbed
@@ -96,94 +215,5 @@ public class GameBallManager : MonoBehaviour
 
 
     // }
-
-    void OnCollisionStay(Collision collision)
-    {
-
-        // Re initializing ball when fallen to the ground(Wooden pallet)
-        if(collision.gameObject.CompareTag("Respawn") && ActiveBall)
-            InitTarget();
-
-        
-    }
-
-    void OnCollisionEnter(Collision collision){
-        if(triggerScript_collision != null && collision.relativeVelocity.sqrMagnitude > 1.5)
-            triggerScript_collision.PlayAudio();
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        //Ball is flagges as thrown when it leaves the throwing area
-        if(other.CompareTag("ThrowingZone")){
-            //Obtaining the orthonormal vector to the initial velocity and the gravity on player's throw
-            Ortonormal_to_direction = Vector3.Cross(new Vector3( _rigidbody.velocity.x, 0, _rigidbody.velocity.z), Physics.gravity).normalized;
-            ThrownBall = true; 
-        
-            /* TODO: To trigger the 'Swish' flying ball audio, this should listen for
-                the "PointerEvent" 'Unselect' from the OVR-ONHandGrabEvent [See commente OnHandGrabEvent code above]
-                Will leave like this for the time being
-             */
-            if(triggerScript_flyingball != null)
-                triggerScript_flyingball.PlayAudio();
-        }
-
-        if(other.CompareTag("GameBounds")){
-            StartCoroutine(BallOutOfBounds());
-        }
-    }
-
-    IEnumerator BallOutOfBounds(){
-        yield return new WaitForSeconds(3);
-        //TODO: Might want to show the ball as grey
-        ActiveBall = false; 
-    }
-
-
-    private void FixedUpdate(){
-
-        // When an active and thrown ball stops moving: Desactivate it and calculate score
-        if(ActiveBall && ThrownBall && throwGameManager.IsCheatMode){
-
-            TargetCollisionManager[] targets = FindObjectsOfType<TargetCollisionManager>();
-
-            Vector3 sum_vector = new Vector3(0,0,0);
-            int vector_count = 0;
-
-            foreach (TargetCollisionManager t in targets)
-                if(t.InTargetZone){
-                    vector_count ++;
-                    sum_vector += t._rigidbody.position;
-                }
-                    
-            if(vector_count > 0)
-                Attract(sum_vector/vector_count);
-            
-        }
-    }
-
-
-    void Attract (Vector3 meanTargetPosition){
-
-        // Distance vector of the center of mass of all the cans (mean position of the targets)
-        Vector3 distance = _rigidbody.position - meanTargetPosition;
-
-        // //  ------ Simplification -----
-        // // Based on the gravitational formula, where mass of the objects is constant* and we should know the constant of gravity
-        // //  The closer the object, the stronger the pull is: Dividing the force by the distance
-
-        
-
-        float forceMagnitud = CheatModePower / distance.sqrMagnitude;
-
-        _rigidbody.AddForce(  Vector3.Project(distance.normalized, Ortonormal_to_direction) * - forceMagnitud );
-
-    }
-
-    // ---- Debug text output ---
-    
-    [SerializeField]
-    public  TextMeshPro text_debug;
-
 
 }

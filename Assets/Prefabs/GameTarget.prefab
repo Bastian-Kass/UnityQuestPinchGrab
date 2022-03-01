@@ -489,7 +489,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d6b4bab15d0ccf45a8c59718f8cde1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwGameManager: {fileID: 11400000, guid: 32987476149e54740b222f2efc65c572, type: 2}
-  triggerScript: {fileID: 2377366652315119119}
   _renderer: {fileID: 8008821096681774504}
-  text: {fileID: 2437030403314273159}
+  ActiveMaterialPosition: 2
+  AudioTriggerScript: {fileID: 2377366652315119119}
+  AudioCollision_Threshold: 2
+  ScoreMultiplier_Distance: 20

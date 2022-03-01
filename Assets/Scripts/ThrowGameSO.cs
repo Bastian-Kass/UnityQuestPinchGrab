@@ -116,7 +116,6 @@ public class ThrowGameSO : ScriptableObject
         foreach(var target in GameTargets){
             TargetCollisionManager temp = target.GetComponent<TargetCollisionManager>();
             tasks.Add( new Task( () => { 
-                temp.SetDebug("Random Text");
                 temp.InitTarget(); 
                 } ) );
         }

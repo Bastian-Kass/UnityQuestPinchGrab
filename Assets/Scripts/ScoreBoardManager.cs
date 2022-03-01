@@ -1,23 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
+using TMPro;
 
 public class ScoreBoardManager : MonoBehaviour
 {
-
-    public Text text;
+    public TextMeshPro text;
 
     [SerializeField]
-    public GameManagerScript throwGameSO;
+    public GameManagerScript gameManager;
 
     private void OnEnable(){
-        throwGameSO.OnScoreChange.AddListener(ChangeScoreInBoard);
+        gameManager.OnScoreChange.AddListener(ChangeScoreInBoard);
     }
 
     private void OnDisable(){
-        throwGameSO.OnScoreChange.RemoveListener(ChangeScoreInBoard);
+        gameManager.OnScoreChange.RemoveListener(ChangeScoreInBoard);
     }
 
     private void ChangeScoreInBoard(int score){
