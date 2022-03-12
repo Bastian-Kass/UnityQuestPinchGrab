@@ -50,8 +50,6 @@ public class GameBallManager : MonoBehaviour
     private LineRenderer LineDrawer;
     private float Theta = 0f;
 
-    public TextMeshPro text;
-
     void OnEnable()
     {
         GameManager.OnChangeGameState.AddListener(RestartPosition);
@@ -159,15 +157,11 @@ public class GameBallManager : MonoBehaviour
                 if(target.InTargetZone)
                     _targets.Add(target);
 
-            text.SetText(_targets.Count.ToString());
-
             if(_targets.Count == 0)
                 return;
 
             // We are only interested in the center of mass
             _centerOfMass = CalculateTargetCenterOfMass();
-
-            text.SetText(_centerOfMass.ToString());
 
             // Drawing circle at the center of mass for debuging purposes
             DrawCircle(_centerOfMass);
