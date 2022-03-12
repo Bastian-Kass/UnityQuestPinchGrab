@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Oculus.Interaction;
+using TMPro;
 
 public class GameBallManager : MonoBehaviour
 {
@@ -12,9 +14,8 @@ public class GameBallManager : MonoBehaviour
     public Rigidbody _rigidbody;
     private Vector3 _initial_position;
     private Quaternion _initial_rotation;
-
+    private Material _material;
     private bool _ActiveBall = false;
-
     public bool ActiveBall
        {
        get { return _ActiveBall; }
@@ -27,24 +28,29 @@ public class GameBallManager : MonoBehaviour
                 
        }
    }
-    
     public bool ThrownBall { get; private set; }
 
-    [SerializeField, Range(5, 10)]
-    public float CheatModePower = 5;
+    // Cheat mode physics variables
+    private List<TargetCollisionManager> _targets;
+    private Vector3 _centerOfMass;
     private Vector3 Ortonormal_to_direction;
 
-
-
+    //Audio variables
     [SerializeField]
     public AudioTrigger triggerScript_flyingball;
-
     [SerializeField, Range(0, 10)]
     public float AudioCollision_Threshold = 2;
     [SerializeField]
     public AudioTrigger triggerScript_collision;
 
-    private Material _material;
+    // Debug variables
+    public float ThetaScale = 0.05f;
+    public float radius = 0.5f;
+    private int Size;
+    private LineRenderer LineDrawer;
+    private float Theta = 0f;
+
+    public TextMeshPro text;
 
     void OnEnable()
     {
@@ -69,6 +75,16 @@ public class GameBallManager : MonoBehaviour
 
         Ortonormal_to_direction = new Vector3();
         _material = gameObject.GetComponentInChildren<Renderer>().material;
+
+        LineDrawer = GetComponent < LineRenderer > ();
+
+        _targets = new List<TargetCollisionManager>();
+    }
+
+    private void FixedUpdate(){
+        // When in cheatmode: a thown ball will be constantly attracted
+        if(ActiveBall && ThrownBall && GameManager.IsCheatMode)
+            AttractBallToTarget();      
     }
 
     public void Initialize(){
@@ -85,14 +101,11 @@ public class GameBallManager : MonoBehaviour
         ThrownBall = false;
     }
 
-
     private void RestartPosition(GameManagerScript.GameStateType state){
         // On game signaling Bootstrap, Initializing target to its original values
         if(state == GameManagerScript.GameStateType.Bootstrap)
             Initialize();
     }
-
-
 
     void OnCollisionStay(Collision collision)
     {
@@ -115,98 +128,124 @@ public class GameBallManager : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        //Ball flagged as thrown when it leaves the throwing area
+        // Manage when ball leaves the throwing zone
         if(other.CompareTag("ThrowingZone")){
-            /*
-                Calculating the orthonormal vector of the thrown ball (direction x gravity)
-                This will be used in the cheatmode since the ball will only correct direction in that axis:
-                  YES > The ball WILL  apply a force in this perpendicular vector
-                  NO  > The ball will not accelerate towards the target in in front/back of it
-                  NO  > The ball will not accelerate towards the target below above it
-                - Only the initial orthonmal vector is neded ( this is not calculated continualy in the update method )
 
-            */
-            //Obtaining the orthonormal vector orthonormal from gravity (up/down) and the initial direction in the x.z plane axis [we use the velocity on x,y of the initial velocity]
-            Ortonormal_to_direction = Vector3.Cross(new Vector3( _rigidbody.velocity.x, 0, _rigidbody.velocity.z), Physics.gravity).normalized;
-            ThrownBall = true; 
-        
+            if(GameManager.IsCheatMode)
+                CalculateCheatModeSettings();
+
+            // Ball considered thrown when leaving the throwing zone
+            // TODO: Consider if the player is not holding the ball
+            ThrownBall = true;
+
             // Pragmatically, we can trigger the effect sound of the ball swishing when it leaves the throw-area
             if(triggerScript_flyingball != null)
                 triggerScript_flyingball.PlayAudio();
         }
 
-        // Detect if the ball left the play-area, in which case, after x seconds, will be flagged as Inactive [ActiveBall = false]
-        if(other.CompareTag("GameBounds")){
+        // Manage when balls leaves the playing bounds
+        if(other.CompareTag("GameBounds"))
             StartCoroutine(BallOutOfBounds(other));
-        }
-    }
-
-    IEnumerator BallOutOfBounds(Collider other){
-        yield return new WaitForSeconds(1);
-        //After the one minute wait, we only change it to inactive if it is still out of the zone
-        // [Maybe the user restarts the game in between this time]
-        if(!other.bounds.Contains(transform.position))
-            ActiveBall = false; 
         
     }
 
-
-    private void FixedUpdate(){
-
-        // When in cheatmode: a thown ball will be constantly attracted
-        if(ActiveBall && ThrownBall && GameManager.IsCheatMode){
-
-
-            //Get targets in the game
+    private void CalculateCheatModeSettings(){
+            // Getting all active targets
             TargetCollisionManager[] targets = FindObjectsOfType<TargetCollisionManager>();
 
+            _targets.Clear();
+
+            foreach ( var target in targets)
+                if(target.InTargetZone)
+                    _targets.Add(target);
+
+            text.SetText(_targets.Count.ToString());
+
+            if(_targets.Count == 0)
+                return;
+
+            // We are only interested in the center of mass
+            _centerOfMass = CalculateTargetCenterOfMass();
+
+            text.SetText(_centerOfMass.ToString());
+
+            // Drawing circle at the center of mass for debuging purposes
+            DrawCircle(_centerOfMass);
+
+
+            // Ignoring gravity; only interested in direction on the plane x,z
+            Vector3 ballDirection = _rigidbody.velocity;
+            ballDirection.y = 0;
+
+            // Cross product of x&z velocity components with the up vector returns the orthonormal vector pointing right to the ball throw
+            Ortonormal_to_direction = Vector3.Cross(ballDirection, Vector3.up ).normalized;
+                  
+    }
+
+    void AttractBallToTarget (){
+
+        if(_targets.Count == 0)
+            return;
+
+        // Getting the distance vector of the ball and the center of mass
+        Vector3 distance_vector = _rigidbody.position - _centerOfMass;
+
+        // Being carefull not to device by cero (even when highly imposible)
+        float pull_magnitud = GameManager.CheatModePower / (distance_vector.sqrMagnitude + 0.01f);
+
+
+        // Determining the angle between the throw direction and the distance between the ball and the center of mass of the targets
+        // This will determine if the ball will go right or left depedning on the center of mass
+        float angle = Vector3.SignedAngle(_rigidbody.velocity, _centerOfMass, Vector3.down);
+
+
+        // Finally adding the force to the object
+        _rigidbody.AddForce(Ortonormal_to_direction * pull_magnitud * Mathf.Sign(angle));
+
+    }
+
+    private Vector3 CalculateTargetCenterOfMass(){
             Vector3 sum_vector = new Vector3(0,0,0);
-            int vector_count = 0;
 
-            //Proceed to calculate a mean position of all targets [Will work as center of mass ]
-            foreach (TargetCollisionManager t in targets)
-                if(t.InTargetZone){
-                    vector_count ++;
-                    sum_vector += t.GetRigidbody().position;
-                }
-                    
-            // Attract the gameball to the calculated center of mass
-            if(vector_count > 0)
-                Attract(sum_vector/vector_count);
-            
+            foreach (TargetCollisionManager t in _targets)
+                sum_vector += t.GetRigidbody().position;
+
+            return sum_vector/_targets.Count;
+    }
+
+    private void DrawCircle(Vector3 center){
+
+        Theta = 0f;
+        Size = (int)((1f / ThetaScale) + 1f);
+        LineDrawer.positionCount = Size;
+
+        for (int i = 0; i < Size; i++) {
+            Theta += (2.0f * Mathf.PI * ThetaScale);
+            float x = radius * Mathf.Cos(Theta);
+            float y = radius * Mathf.Sin(Theta);
+            LineDrawer.SetPosition(i, new Vector3(x, y, 0) + center);
         }
-    }
-
-
-    void Attract (Vector3 meanTargetPosition){
-
-        // TODO:  -----    IMPORTANT  -------
-        /* There needs to be a maximum a constant velocity!!, 
-        /* we cannot only add the force or the ball accelarates too much and sends the cans flying like crazy
-        */ 
-
-
-        /* NOTE: This calculation is a rough simplification of the gravity formula
-            m1, m2 and gravity constant are swapped for a constant (cheat-mode-power) to have control over the attraction
-            since the formula determines the distance^2, we can directly know it by the sqrMagnitud of the distance vector
-            We finalize by adding the projected force into the orthonormal vector calculated on throw, and times the forceMagnitud
-        */
-        //TODO: Add graph explanation of these maths
-
-        // Distance vector of the center of mass of all the cans (mean position of the targets)
-        Vector3 distance = _rigidbody.position - meanTargetPosition;
-
-        float forceMagnitud = CheatModePower / distance.sqrMagnitude;
-
-        _rigidbody.AddForce(  Vector3.Project(distance.normalized, Ortonormal_to_direction) * - forceMagnitud );
 
     }
 
+    /// <summary>
+    /// Counter to determine if ball has left and stayed out of bounds for certain amount of time
+    /// </summary>
+    IEnumerator BallOutOfBounds(Collider other){
 
+        yield return new WaitForSeconds(1);
 
+        // Recheck if the ball is still out of bounds.
+        if(other.bounds.Contains(transform.position))
+            yield return null;
 
+        //After countdown we deactivate the ball
+        ActiveBall = false; 
 
-
+        // Clearing the cheatmode debbug line renderer
+        LineDrawer.positionCount = 0;
+        
+    }
 
 
 

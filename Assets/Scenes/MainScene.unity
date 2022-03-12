@@ -659,7 +659,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 204672298}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -848,6 +848,7 @@ MonoBehaviour:
   loseSoundAudio: {fileID: 2109413497}
   _IsCheatMode: 0
   CheatGravity: -7.5
+  CheatModePower: 5
 --- !u!4 &273239985
 Transform:
   m_ObjectHideFlags: 0
@@ -1440,6 +1441,21 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.18
       objectReference: {fileID: 0}
+    - target: {fileID: 3478770211837991315, guid: 844b93056518bac43afb420d4911cfec,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.9433962
+      objectReference: {fileID: 0}
+    - target: {fileID: 3478770211837991315, guid: 844b93056518bac43afb420d4911cfec,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.7223171
+      objectReference: {fileID: 0}
+    - target: {fileID: 3478770211837991315, guid: 844b93056518bac43afb420d4911cfec,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.5816304
+      objectReference: {fileID: 0}
     - target: {fileID: 4071940458178589738, guid: 844b93056518bac43afb420d4911cfec,
         type: 3}
       propertyPath: m_IsActive
@@ -1865,9 +1881,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4494136072495893399, guid: e63364ea09985dc4aa06898d2a6bef08,
         type: 3}
+      propertyPath: text
+      value: 
+      objectReference: {fileID: 20023364}
+    - target: {fileID: 4494136072495893399, guid: e63364ea09985dc4aa06898d2a6bef08,
+        type: 3}
       propertyPath: GameManager
       value: 
       objectReference: {fileID: 273239984}
+    - target: {fileID: 4494136072495893399, guid: e63364ea09985dc4aa06898d2a6bef08,
+        type: 3}
+      propertyPath: CheatModePower
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e63364ea09985dc4aa06898d2a6bef08, type: 3}
 --- !u!4 &851174592 stripped
@@ -3435,9 +3461,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4494136072495893399, guid: e63364ea09985dc4aa06898d2a6bef08,
         type: 3}
+      propertyPath: text
+      value: 
+      objectReference: {fileID: 20023364}
+    - target: {fileID: 4494136072495893399, guid: e63364ea09985dc4aa06898d2a6bef08,
+        type: 3}
       propertyPath: GameManager
       value: 
       objectReference: {fileID: 273239984}
+    - target: {fileID: 4494136072495893399, guid: e63364ea09985dc4aa06898d2a6bef08,
+        type: 3}
+      propertyPath: CheatModePower
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e63364ea09985dc4aa06898d2a6bef08, type: 3}
 --- !u!4 &1868212870 stripped
@@ -4041,9 +4077,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4494136072495893399, guid: e63364ea09985dc4aa06898d2a6bef08,
         type: 3}
+      propertyPath: text
+      value: 
+      objectReference: {fileID: 20023364}
+    - target: {fileID: 4494136072495893399, guid: e63364ea09985dc4aa06898d2a6bef08,
+        type: 3}
       propertyPath: GameManager
       value: 
       objectReference: {fileID: 273239984}
+    - target: {fileID: 4494136072495893399, guid: e63364ea09985dc4aa06898d2a6bef08,
+        type: 3}
+      propertyPath: CheatModePower
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e63364ea09985dc4aa06898d2a6bef08, type: 3}
 --- !u!4 &1958391525 stripped

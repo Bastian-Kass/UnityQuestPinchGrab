@@ -161,7 +161,7 @@ public class GameManagerScript : MonoBehaviour
 
         // Bonus for balls not used!
         foreach( GameBallManager gb in GameBalls){
-            if(!gb.ThrownBall)
+            if(gb.ActiveBall)
                 score += 5000;
         }
 
@@ -190,6 +190,9 @@ public class GameManagerScript : MonoBehaviour
 
     [System.NonSerialized]
     public UnityEvent<bool> OnCheatModeChange;
+
+    [SerializeField, Range(5, 20)]
+    public float CheatModePower = 10;
 
     public bool IsCheatMode
     {
