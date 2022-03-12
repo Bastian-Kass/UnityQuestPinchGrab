@@ -10,7 +10,6 @@ public class GameBallManager : MonoBehaviour
     [SerializeField]
     private GameManagerScript GameManager;
 
-
     public Rigidbody _rigidbody;
     private Vector3 _initial_position;
     private Quaternion _initial_rotation;
@@ -62,7 +61,8 @@ public class GameBallManager : MonoBehaviour
         // handGrabInteractable.OnPointerEvent -= OnHandGrabEvent;
     }
 
-    private void Awake(){
+    private void Awake()
+    {
 
         //Reference to rigidbody for collision velocity calculations
         _rigidbody = gameObject.GetComponent<Rigidbody>();
@@ -79,13 +79,15 @@ public class GameBallManager : MonoBehaviour
         _targets = new List<TargetCollisionManager>();
     }
 
-    private void FixedUpdate(){
+    private void FixedUpdate()
+    {
         // When in cheatmode: a thown ball will be constantly attracted
         if(ActiveBall && ThrownBall && GameManager.IsCheatMode)
             AttractBallToTarget();      
     }
 
-    public void Initialize(){
+    public void Initialize()
+    {
         //Making it not move when reseting!!
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
@@ -99,7 +101,8 @@ public class GameBallManager : MonoBehaviour
         ThrownBall = false;
     }
 
-    private void RestartPosition(GameManagerScript.GameStateType state){
+    private void RestartPosition(GameManagerScript.GameStateType state)
+    {
         // On game signaling Bootstrap, Initializing target to its original values
         if(state == GameManagerScript.GameStateType.Bootstrap)
             Initialize();
@@ -118,7 +121,8 @@ public class GameBallManager : MonoBehaviour
          
     }
 
-    void OnCollisionEnter(Collision collision){
+    void OnCollisionEnter(Collision collision)
+    {
         //TODO: Determine a proper magnitud to signal colission sound (ping pong ball sound)
         if(triggerScript_collision != null && collision.relativeVelocity.sqrMagnitude > AudioCollision_Threshold)
             triggerScript_collision.PlayAudio();
@@ -147,7 +151,8 @@ public class GameBallManager : MonoBehaviour
         
     }
 
-    private void CalculateCheatModeSettings(){
+    private void CalculateCheatModeSettings()
+    {
             // Getting all active targets
             TargetCollisionManager[] targets = FindObjectsOfType<TargetCollisionManager>();
 
@@ -176,7 +181,8 @@ public class GameBallManager : MonoBehaviour
                   
     }
 
-    void AttractBallToTarget (){
+    void AttractBallToTarget ()
+    {
 
         if(_targets.Count == 0)
             return;
@@ -198,7 +204,8 @@ public class GameBallManager : MonoBehaviour
 
     }
 
-    private Vector3 CalculateTargetCenterOfMass(){
+    private Vector3 CalculateTargetCenterOfMass()
+    {
             Vector3 sum_vector = new Vector3(0,0,0);
 
             foreach (TargetCollisionManager t in _targets)
@@ -207,7 +214,8 @@ public class GameBallManager : MonoBehaviour
             return sum_vector/_targets.Count;
     }
 
-    private void DrawCircle(Vector3 center){
+    private void DrawCircle(Vector3 center)
+    {
 
         Theta = 0f;
         Size = (int)((1f / ThetaScale) + 1f);
@@ -225,7 +233,8 @@ public class GameBallManager : MonoBehaviour
     /// <summary>
     /// Counter to determine if ball has left and stayed out of bounds for certain amount of time
     /// </summary>
-    IEnumerator BallOutOfBounds(Collider other){
+    IEnumerator BallOutOfBounds(Collider other)
+    {
 
         yield return new WaitForSeconds(1);
 
@@ -240,7 +249,6 @@ public class GameBallManager : MonoBehaviour
         LineDrawer.positionCount = 0;
         
     }
-
 
 
     //  ----- Not useful right now, I just dont want to lose the code to detect grab events ---
