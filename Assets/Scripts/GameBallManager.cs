@@ -34,6 +34,9 @@ public class GameBallManager : MonoBehaviour
     private Vector3 _centerOfMass;
     private Vector3 Ortonormal_to_direction;
 
+    [SerializeField, Range(0, 2)]
+    public float CenterOfMassDistance = 0.75f;
+
     //Audio variables
     [SerializeField]
     public AudioTrigger triggerScript_flyingball;
@@ -48,6 +51,8 @@ public class GameBallManager : MonoBehaviour
     private int Size;
     private LineRenderer LineDrawer;
     private float Theta = 0f;
+
+    public GameObject CenterOfMassRep;
 
     void OnEnable()
     {
@@ -99,6 +104,13 @@ public class GameBallManager : MonoBehaviour
         //Setting as active
         ActiveBall = true;
         ThrownBall = false;
+
+        // Drawing force lines as to debug
+        if(LineDrawer != null)
+            LineDrawer = GetComponent < LineRenderer > ();
+        
+        LineDrawer.positionCount = 2;
+
     }
 
     private void RestartPosition(GameManagerScript.GameStateType state)
@@ -168,16 +180,20 @@ public class GameBallManager : MonoBehaviour
             // We are only interested in the center of mass
             _centerOfMass = CalculateTargetCenterOfMass();
 
-            // Drawing circle at the center of mass for debuging purposes
-            DrawCircle(_centerOfMass);
+            // Moving the center of mass to a between point between the ball and the targets.
+            _centerOfMass += ( _rigidbody.position - _centerOfMass).normalized * CenterOfMassDistance;
 
+            // Drawing circle at the center of mass for debuging purposes
+            // DrawCircle(_centerOfMass);
+            CenterOfMassRep.SetActive(true);
+            CenterOfMassRep.GetComponent<Rigidbody>().position = _centerOfMass;
 
             // Ignoring gravity; only interested in direction on the plane x,z
             Vector3 ballDirection = _rigidbody.velocity;
             ballDirection.y = 0;
 
             // Cross product of x&z velocity components with the up vector returns the orthonormal vector pointing right to the ball throw
-            Ortonormal_to_direction = Vector3.Cross(ballDirection, Vector3.up ).normalized;
+            Ortonormal_to_direction = Vector3.Cross(ballDirection, Vector3.down ).normalized;
                   
     }
 
@@ -193,15 +209,26 @@ public class GameBallManager : MonoBehaviour
         // Being carefull not to device by cero (even when highly imposible)
         float pull_magnitud = GameManager.CheatModePower / (distance_vector.sqrMagnitude + 0.01f);
 
-
-        // Determining the angle between the throw direction and the distance between the ball and the center of mass of the targets
-        // This will determine if the ball will go right or left depedning on the center of mass
-        float angle = Vector3.SignedAngle(_rigidbody.velocity, _centerOfMass, Vector3.down);
-
+        //Creating the force accoridngly
+        Vector3 CheatModeForce = Ortonormal_to_direction * pull_magnitud * (-1) * IsRightFromDirection(_centerOfMass);
 
         // Finally adding the force to the object
-        _rigidbody.AddForce(Ortonormal_to_direction * pull_magnitud * Mathf.Sign(angle));
+        _rigidbody.AddForce(CheatModeForce);
 
+
+        LineDrawer.SetPosition(0, _rigidbody.position);
+        LineDrawer.SetPosition(1, _rigidbody.position + CheatModeForce);
+
+    }
+
+    private float IsRightFromDirection(Vector3 _centerOfMass){
+        float angle = Vector3.SignedAngle(
+                            new Vector3(_rigidbody.position.x + _rigidbody.velocity.x, 0, _rigidbody.position.z + _rigidbody.velocity.z), 
+                            new Vector3(_centerOfMass.x, 0, _centerOfMass.z),
+                            new Vector3(_rigidbody.position.x, 0 ,_rigidbody.position.z)
+                            );
+
+        return Mathf.Sign(angle);
     }
 
     private Vector3 CalculateTargetCenterOfMass()
@@ -227,6 +254,16 @@ public class GameBallManager : MonoBehaviour
             float y = radius * Mathf.Sin(Theta);
             LineDrawer.SetPosition(i, new Vector3(x, y, 0) + center);
         }
+
+    }
+
+    private void DrawCheatModeForce(Vector3 force)
+    {
+        LineDrawer.positionCount = 2;
+
+        
+        
+
 
     }
 
