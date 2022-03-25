@@ -1,8 +1,9 @@
 # UnityQuestPinchGrab
-### Test project in aims to experience Unity 3D development paired with OculusSDK 3.7
-The game consist in a simple "Throw the balls and collapse the can tower". Additionally, there is a "cheatmode" which involves math in the 3D space and understanding of the unity engine to correct the path of the ball when thrown thus assist the player on the task.
+### Test project in aims to experience the Unity development environment paired with OculusSDK 3.7 interaction plugin and assets
+The game consist in a simple "Throw the balls to make the soda can tower collapse". 
+Additionally, there is a "Cheat"/"Assist" mode to correct the path of the ball.
 
-# Instalation specifications
+# Installation specifications
 Unity version: 2020.3.30f
 ## Used Packages
 * OculusSDK XR Plugin 3.0.0 (Preview 2)
@@ -14,64 +15,76 @@ Unity version: 2020.3.30f
 * Oculus Integration 37.0
 * Quick Outline 1.0.5
 
-## Note:
-*To compile the project the 'build settings' might need to be changed to Android upon first access*
+## Configurations:
+* To compile the project the 'build settings' might need to be changed to Android upon first access
 
-
-## Abstract
-The first instances of this project involved creating my own implementation the grabbing functionality by using the autodetection of the "pinch" gesture in the old "Oculus Integration suite 3.5". However, since its update to 3.7, Meta(Previously known as Oculus) provides a much more robust implementation that encompases complex grab with both hardware or hand-detection only controls.
-
-To make things work, this project is heavily based on the OculusInteractionRig provided in the OculusIntegration 3.7 within the "Complex Hand Interactions" Scene. It was further simplified to only encompass the "grab" and "poke" gestures for both controller and hand-detection interactions. Both are then set to work with 3 distinct balls and a floating button menu by assigning the proper scripts[Interactors: Grab Interactable, Transformable, One Hand Free Transform, Snap Point, Poke Interactable]
 
 # Game Logic
-As previously mentioned, the game consists in throwing three balls and making a soda-can tower collapse.
 
-A natural throw is achieved by using the provided Oculus Hand and Controller Interactions. Additionally, these provide a software architecture that allow implementing a custom throw behaviour; for the time being, the project uses a copy of the "ThrowVelocityCalculator" which records the certain amount of position of the hand at all times to calculate a smooth throw velocity accordingly. As custom parameters we set the buffer to record .5 seconds at 90hrz, we desregard the instant velocity and the tangential velocity(not important for a ball throw), and set a linear velocity modifier of 1.2 to not strain the user.
+
+## Interactions in VR with the Meta Quest/Oculus Quest 2
+
+To make things work, this project is heavily based on the **OculusInteractionRig** provided in the *OculusIntegration 3.7* asset, and within the "Complex Hand Interactions" Scene; This implementation was then further simplified to only cover the "grab" and "poke" gestures for both controller and hand-detection interactions. These are set to work with 3 balls [Prefab game object] and a floating menu menu by assigning the proper scripts [Interactions: Grab Interactable, Transformable, One Hand Free Transform, Snap Point, Poke Interactable].
+
+### User experience within the VR environment
+By using the **Oculus Hand and Controller Interaction assets** and customizing them through their parameters, it is then possible to achieve a throw interaction that feels natural the the user. As a bit of context, the Oculus interactable assets work by saving a set amount of positions and velocities that precede the event/gesture that signals the end of the grab interaction; the algorithm then calculates a velocity by purging and weighing the different saved values. For the time being, the project uses a copy of the "ThrowVelocityCalculator" and applies the following custom parameters obtained holistically:
 
 ![Screenshot 2022-03-25 134535](https://user-images.githubusercontent.com/6613145/160115128-b792f1ef-c268-4e69-8f24-79f3f02d3f7d.jpg)
 
-To work together with the Oculus Interaction Rig, the project implements the throwing objects(with their respective GrabInteractable, SnapPoint, and Tranform related scripts). Each ball also implements a custom script to manage audio, debuging visuals, position to reset to whenever a game starts, and communication with the general Game Manager script to set the cummulative score.
+## Integrating the game objects with the Interaction Rig
+To work together with the Oculus Interaction Rig, the project implements the throwing objects(with their respective GrabInteractable, SnapPoint, and Transform related scripts). Each ball also implements a custom script to manage audio, debugging visuals, position to reset to whenever a game starts, and communication with the general Game Manager script to set the cumulative score.
 
-Likewise, each target contain the TargetCollisionManager script to manage the audio on collision, looks (changing from red to grey when target is not longer active), and to comunicate with the general GameManager object script the cummulative score.
+## Target behavior
+Likewise, each target contain the TargetCollisionManager script to manage the audio on collision, general object looks (changing from red to grey when target is not longer active), and to communicate the cumulative score with the general GameManager script.
 
-Finally, the project includes an object with the general GameManager script. This script handles the cumulattive score, and communicates with the game object through events and references to handle the state of the game given a certain logic or interaction:
+## Global Game Management
+Finally, the project includes an object with the general GameManager script. This script handles the cumulative score, and communicates with other game object through events and references in order to handle the state of the game given a certain logic or interaction:
 
-## Cheat Mode
-
-The most important part of the development was making the game interactions feel natural, and this includes a polished way to implement the cheat/assist mode. Consequantially, and throw various iterations involving "trial and error" research, this mode was designed as follows:
+## Cheat/Assist Mode
+The most challenging part of this development was making the game interactions feel natural, and this includes a polished way to implement the cheat/assist mode. Consequentially, and involving various iterations of "trial and error" research, this mode was designed as follows:
 
 1) To assist the player, the game can be set so the thrown balls are attracted to the targets.
-2) To do so, whenever the player makes a throw, we create an object between the player and the targets(center of mass of the targets) that will serve as a povital point to attract the ball.
-3) It is essential that the ball is only affected in it direction towards its left or right side of its initial direction.
-** This way, the ball does not accelerate together with the added gravitational pull when the ball is traversing above the targets, nor it does accelerate towards the targets exponentially whenver it gets close to them.
+2) To do so, whenever the player makes a throw, we create an object between the player and the targets(center of mass of the targets) that will serve as a pivotal point to attract the ball.
+3) It is essential that the ball's trajectory is only affected to its relative left or right. 
+   * If the attraction has an effect on the axis of the ball's trajectory, the ball gains a "wonky" behavior whenever it exponential accelerates towards the targets; even worse when the ball even stops its current trajectory and returns towards the targets given a strong enough attraction.
+   * If the attraction has an effect on the gravitational axis, the ball gains an usual behavior whenever it is thrown over the targets thus accelerates downwards unnaturally, or when it reaches a lower location than the targets and starts defying gravity in response to this.
 
-*To achieve this, the implementation calculates the orthonormal vector to the ball's direction in order to keep track of the right side of the initial trayectory; then the ball is iteratively attracted to the previous calculated object that is positioned between the player and the targets in this relative axis.
+To achieve the envisioned outcome, the implementation calculates the orthonormal vector to the **ball's direction** and the **upwards direction vector** in order to keep track of the right side of the initial trajectory; the ball is then iteratively attracted to the previous calculated object[as mentioned in step 2]. The result in a top-down view and some additional visuals looks like can be seen in the following video:
 
 https://user-images.githubusercontent.com/6613145/160112832-198b8467-b0db-4517-b140-62552d10564f.mp4
 
 
 
-
-
 ### Area bounds and colliders for game logic
-The game makes use of two main areas; the first one to determine where the player should be, and the second one to determine where the gamplay should reside. These and some other interactions between objects are the following:
+The game makes use of three main areas to assist in determining the state of the game.
 
-* GameBounds: Set as a collider trigger. Whenever a ball leaves this area, a counter is set and closely followed by the action of making the ball inactive. An inactive ball means that is has been thrown and can no longer be used for any in-game logic.
-  
-    * This makes a difference for very specific instances; for example, imagine that a sub-sequent ball makes a can fly towards a ball that has already been thrown; this should not count to the final score.
+* GameBounds [Collider/Trigger]: Whenever a ball leaves this area a time counter, and after certain time the ball is marked as inactive.
+  * Whenever all balls are set to inactive, now matter the amount of ball sin the scene, the GameManager script knows that the game has ended.
+  * Additionally, this stops occurrences such as a falling target object hitting a ball in its way down and counting towards the final score.
 
-* ThrowingBounds: Whenever a ball leaves the area that surrounds the player it is set as a "Thrown" ball. This comes extremely usefull to easily determine when a ball has been thrown without overbearing the system by detecting the "Thrown" event.
+* ThrowingBounds [Collider/Trigger]: Whenever a ball leaves the area that surrounds the player it is set as a "Thrown" ball. This comes extremely useful to easily determine when a ball has been thrown without overbearing the system by detecting the "Thrown" event.
 
+  * Whenever the "Assist"/"Cheat" mode is active, a ball leaving the player area signals the system to calculate and instantiate the object which will generate this artificial attraction force.
   * Useful to add a "Swooshing" sound effect to the ball whenever it has been thrown.
 
-* Each throwable object(Ball) has two main interactions. Whenever it hits a gametarget(soda-can) it calculates a score and adds it to the tally on the scene-bound GameManager. Additioonally, with each collision over a specific threshold, it has a nice collison sound for game immersion.
+* ActiveTarget area[Collider/Trigger]: Whenever a target leaves this area, any hit to it will not count towards the final score. This comes handy to differentiate hits such as:
+  * A hit from a thrown ball to a target inside the are should count towards the score.
+  * A hit from a ball that has bounced after hitting another target should count towards the score.
+  * A hit from a ball to a target that is laying on the ground(outside the area) should not count towards the score.
 
-* If a ball fell to the ground, either by mistake or a terrible throw, it will automatically reset its position to the provided container to the right for easy access.
+### Game score
+The game score is calculated by addition in two distinct events:
+* The square magnitude of the collision relative velocity between an active ball and an active target [times a multiplier]
+  * Multiple hits can happen each throw whenever the ball bounces between targets.
+* The square magnitude of the distance between the initial target position and the final position [times a multiplier]
+  * Only for targets that left the active-target zone
+* The number of unused balls [times 5000]
+
 
 # Important notes
-Oculus Quest 2 is not perfect; controller detection and hand detection success vary gratly from the context of the player. For example, how much light is in the room whenever the player is using hand-detection greatly affects its effectiveness.
+* Oculus Quest 2 is not perfect; controller detection and hand detection success vary greatly from the context of the player. For example, how much light is in the room whenever the player is using hand-detection greatly affects its effectiveness.
+* The first instances of this project involved creating my own implementation the grabbing functionality by using the auto-detection of the "pinch" gesture in the old "Oculus Integration suite 3.5". However, since its update to 3.7, Meta(Previously known as Oculus) provides a much more robust implementation that encompasses complex grab with both hardware or hand-detection only controls.
 
 # Work for future iterations
 
-* The hand visualization of the Oculus Quest integration are provided as colidable, and sometimes hit the balls when their location is not determined correctly by the headset. They should be set to not collide with objects themselves.
-* 
+* The hand visualization of the Oculus Quest integration are provided as collidable, and sometimes hit the balls when their location is not determined correctly by the headset. They should be set to not collide with objects themselves.
