@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Oculus.Interaction;
-using TMPro;
 
 public class GameBallManager : MonoBehaviour
 {
@@ -46,12 +45,7 @@ public class GameBallManager : MonoBehaviour
     public AudioTrigger triggerScript_collision;
 
     // Debug variables
-    public float ThetaScale = 0.05f;
-    public float radius = 0.5f;
-    private int Size;
     private LineRenderer LineDrawer;
-    private float Theta = 0f;
-
     public GameObject CenterOfMassRep;
 
     void OnEnable()
@@ -240,31 +234,6 @@ public class GameBallManager : MonoBehaviour
             return sum_vector/_targets.Count;
     }
 
-    private void DrawCircle(Vector3 center)
-    {
-
-        Theta = 0f;
-        Size = (int)((1f / ThetaScale) + 1f);
-        LineDrawer.positionCount = Size;
-
-        for (int i = 0; i < Size; i++) {
-            Theta += (2.0f * Mathf.PI * ThetaScale);
-            float x = radius * Mathf.Cos(Theta);
-            float y = radius * Mathf.Sin(Theta);
-            LineDrawer.SetPosition(i, new Vector3(x, y, 0) + center);
-        }
-
-    }
-
-    private void DrawCheatModeForce(Vector3 force)
-    {
-        LineDrawer.positionCount = 2;
-
-        
-        
-
-
-    }
 
     /// <summary>
     /// Counter to determine if ball has left and stayed out of bounds for certain amount of time
