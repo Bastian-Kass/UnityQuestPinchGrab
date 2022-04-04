@@ -31,7 +31,7 @@ public class GameBallManager : MonoBehaviour
     // Cheat mode physics variables
     private List<TargetCollisionManager> _targets;
     private Vector3 _centerOfMass;
-    private Vector3 Ortonormal_to_direction;
+    private Vector3 Orthonormal_to_direction;
 
     [SerializeField, Range(0, 2)]
     public float CenterOfMassDistance = 0.75f;
@@ -70,7 +70,7 @@ public class GameBallManager : MonoBehaviour
         _initial_position = gameObject.transform.position;
         _initial_rotation = gameObject.transform.rotation;
 
-        Ortonormal_to_direction = new Vector3();
+        Orthonormal_to_direction = new Vector3();
         _material = gameObject.GetComponentInChildren<Renderer>().material;
 
         LineDrawer = GetComponent < LineRenderer > ();
@@ -186,7 +186,7 @@ public class GameBallManager : MonoBehaviour
             ballDirection.y = 0;
 
             // Cross product of x&z velocity components with the up vector returns the orthonormal vector pointing right to the ball throw
-            Ortonormal_to_direction = Vector3.Cross(ballDirection, Vector3.up ).normalized;
+            Orthonormal_to_direction = Vector3.Cross(ballDirection, Vector3.up ).normalized;
                   
     }
 
@@ -203,7 +203,7 @@ public class GameBallManager : MonoBehaviour
         float pull_magnitud = GameManager.CheatModePower / (distance_vector.sqrMagnitude + 0.01f);
 
         //Creating the force accoridngly
-        Vector3 CheatModeForce = Ortonormal_to_direction * pull_magnitud * IsRightFromDirection(_centerOfMass);
+        Vector3 CheatModeForce = Orthonormal_to_direction * pull_magnitud * IsRightFromDirection(_centerOfMass);
 
         // Finally adding the force to the object
         _rigidbody.AddForce(CheatModeForce);
