@@ -123,13 +123,13 @@ public class GameBallManager : MonoBehaviour
             Initialize();
 
 
-        // TODO: Investigate -> efficiency of OnTriggerExit( defined Gamebounds ) VS OnCollisionStay( with any object other tahn the defined ones [respawn, hands, other balls] )
+        // TODO: Investigate -> efficiency of OnTriggerExit( defined Gamebounds ) VS OnCollisionStay( with any object other than the defined ones [respawn, hands, other balls] )
          
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        //TODO: Determine a proper magnitud to signal colission sound (ping pong ball sound)
+        //TODO: Determine a proper magnitude to signal colission sound (ping pong ball sound)
         if(triggerScript_collision != null && collision.relativeVelocity.sqrMagnitude > AudioCollision_Threshold)
             triggerScript_collision.PlayAudio();
     }
@@ -199,11 +199,11 @@ public class GameBallManager : MonoBehaviour
         // Getting the distance vector of the ball and the center of mass
         Vector3 distance_vector = _rigidbody.position - _centerOfMass;
 
-        // Being carefull not to device by cero (even when highly imposible)
-        float pull_magnitud = GameManager.CheatModePower / (distance_vector.sqrMagnitude + 0.01f);
+        // Being carefull not to device by cero (even when highly improbable)
+        float pull_magnitude = GameManager.CheatModePower / (distance_vector.sqrMagnitude + 0.01f);
 
         //Creating the force accordingly
-        Vector3 CheatModeForce = Orthonormal_to_direction * pull_magnitud * IsRightFromDirection(_centerOfMass);
+        Vector3 CheatModeForce = Orthonormal_to_direction * pull_magnitude * IsRightFromDirection(_centerOfMass);
 
         // Finally adding the force to the object
         _rigidbody.AddForce(CheatModeForce);
