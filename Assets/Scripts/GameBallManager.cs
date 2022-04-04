@@ -80,7 +80,7 @@ public class GameBallManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // When in cheatmode: a thown ball will be constantly attracted
+        // When in cheatmode: a thrown ball will be constantly attracted
         if(ActiveBall && ThrownBall && GameManager.IsCheatMode)
             AttractBallToTarget();      
     }
@@ -118,7 +118,7 @@ public class GameBallManager : MonoBehaviour
     {
          
         //Active balls that have not been thrown, respawn after staying collisioning 
-        // with the wooden palet below
+        // with the wooden pallet below
         if(ActiveBall && !ThrownBall && collision.gameObject.CompareTag("Respawn"))
             Initialize();
 
@@ -202,7 +202,7 @@ public class GameBallManager : MonoBehaviour
         // Being carefull not to device by cero (even when highly imposible)
         float pull_magnitud = GameManager.CheatModePower / (distance_vector.sqrMagnitude + 0.01f);
 
-        //Creating the force accoridngly
+        //Creating the force accordingly
         Vector3 CheatModeForce = Orthonormal_to_direction * pull_magnitud * IsRightFromDirection(_centerOfMass);
 
         // Finally adding the force to the object
