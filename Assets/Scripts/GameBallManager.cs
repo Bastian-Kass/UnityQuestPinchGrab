@@ -45,7 +45,6 @@ public class GameBallManager : MonoBehaviour
     public AudioTrigger triggerScript_collision;
 
     // Debug variables
-    private LineRenderer LineDrawer;
     public GameObject CenterOfMassRep;
 
     void OnEnable()
@@ -73,8 +72,6 @@ public class GameBallManager : MonoBehaviour
         Orthonormal_to_direction = new Vector3();
         _material = gameObject.GetComponentInChildren<Renderer>().material;
 
-        LineDrawer = GetComponent < LineRenderer > ();
-
         _targets = new List<TargetCollisionManager>();
     }
 
@@ -98,13 +95,6 @@ public class GameBallManager : MonoBehaviour
         //Setting as active
         ActiveBall = true;
         ThrownBall = false;
-
-        // Drawing force lines as to debug
-        if(LineDrawer != null)
-            LineDrawer = GetComponent < LineRenderer > ();
-        
-        LineDrawer.positionCount = 2;
-
     }
 
     private void RestartPosition(GameManagerScript.GameStateType state)
@@ -208,10 +198,6 @@ public class GameBallManager : MonoBehaviour
         // Finally adding the force to the object
         _rigidbody.AddForce(CheatModeForce);
 
-
-        LineDrawer.SetPosition(0, _rigidbody.position);
-        LineDrawer.SetPosition(1, _rigidbody.position + CheatModeForce);
-
     }
 
     private float IsRightFromDirection(Vector3 _centerOfMass){
@@ -249,9 +235,6 @@ public class GameBallManager : MonoBehaviour
 
         //After countdown we deactivate the ball
         ActiveBall = false; 
-
-        // Clearing the cheatmode debbug line renderer
-        LineDrawer.positionCount = 0;
         
     }
 
