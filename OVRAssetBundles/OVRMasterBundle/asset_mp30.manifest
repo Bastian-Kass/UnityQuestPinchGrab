@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 3168402151
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a72803bc304974ed2e495f8d19ee393f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/MyAssets/SoundEffects/zapsplat_multimedia_game_sound_slot_machine_mallet_chime_positive_win_001_65507.mp3
+- Assets/MyAssets/SoundEffects/sport_table_tennis_ping_pong_bat_hit_ball_003.mp3
+- Assets/MyAssets/SoundEffects/zapsplat_foley_tin_can_with_lid_peeled_back_hit_lid_twang_004_12264.mp3
+- Assets/MyAssets/SoundEffects/zapsplat_foley_tin_can_with_lid_peeled_back_hit_lid_twang_003_12263.mp3
+- Assets/MyAssets/SoundEffects/sport_table_tennis_ping_pong_bat_hit_ball_002.mp3
+- Assets/MyAssets/SoundEffects/zapsplat_cartoon_swipe_fast_swish_001_49164.mp3
+- Assets/MyAssets/SoundEffects/zapsplat_multimedia_game_sound_fun_arcade_organ_short_negative_fail_lose_003_54276.mp3
+Dependencies: []

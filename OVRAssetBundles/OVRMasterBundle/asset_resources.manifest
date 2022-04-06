@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3355926998
+CRC: 3800066315
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1d0d647d55008bf63e4464cec947e7c7
+    Hash: cff810d577d2bf1f30a166bbe8522aa0
   TypeTreeHash:
     serializedVersion: 2
     Hash: 48c83e8dd0f921dfdce11bed644a905b
@@ -174,4 +174,6 @@ Assets:
 - Assets/Oculus/VR/Resources/Texture2D Blit.shader
 - Assets/TextMesh Pro/Resources/LineBreaking Leading Characters.txt
 - Assets/Oculus/Avatar/Resources/Materials/AvatarSurfaceShader.shader
-Dependencies: []
+Dependencies:
+- D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_shader0
+- D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_ttf0

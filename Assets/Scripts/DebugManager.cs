@@ -14,16 +14,13 @@ public class DebugManager : MonoBehaviour
 
     public Vector3 ThrowPosition;
     public Vector3 ThrowDirection;
-    private LineRenderer LineDrawer;
     private float TimeStep = 0.03f;
-
 
     public float slowdownFactor = 0.05f;
 
     public void OnEnable(){
         this.SlowMode = false;
         this.TimeStep = Time.fixedDeltaTime;
-        LineDrawer = gameObject.GetComponent<LineRenderer>();
     }
 
     public void ToggleSlowMotion(){
@@ -38,7 +35,6 @@ public class DebugManager : MonoBehaviour
 
             SlowMode = true;
         }
-
     }
 
 
@@ -52,8 +48,8 @@ public class DebugManager : MonoBehaviour
         
     }
 
-    public void Update(){
-        LineDrawer.SetPosition(0, ThrowPosition);
-        LineDrawer.SetPosition(1, ThrowDirection);
+    private void OnDrawGizmos(){
+        Gizmos.color = Color.white;
+        Gizmos.DrawLine(ThrowPosition, ThrowDirection);
     }
 }

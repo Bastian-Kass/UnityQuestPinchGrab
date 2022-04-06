@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1377441210
+CRC: 4256416826
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0cab10f5b3ec02639b32c6aea50abc88
+    Hash: 981a5f01327eaba52a27d0e58607b9d8
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 5e508c21a6bb806450c068ac82fd1554
+    Hash: d832ffaadf62b3364a00c39bb1741166
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -23,9 +23,13 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 43
   Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
 - Class: 54
   Script: {instanceID: 0}
 - Class: 64
+  Script: {instanceID: 0}
+- Class: 65
   Script: {instanceID: 0}
 - Class: 81
   Script: {instanceID: 0}
@@ -54,6 +58,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 5c67033f580359c4581dff1ccffcca91, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 6d6b4bab15d0ccf45a8c59718f8cde1a, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 9067480af55f5874d8f613b16812f968, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 2864da2f393a3e948bb12ec4ac9b1782, type: 3}
@@ -62,23 +68,25 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 3236b8f205019504589358e7e0412a38, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 0a0ad4ecf30771d44bf163058922924b, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 2d179fd81cd2e344ab2e610cd5f7260e, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: bebfb74b97b000d4899abbd61f49aa40, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: ced30fb0d3378c442934280394576509, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: ffac1ecd519bd1d409558219f47d07b0, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: b942c16a6d6a4edaad7c18c7d5762cdf, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: ae43f25c06eb2d9408a201216b4c3ed7, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 86bd0d3098d25db4c9c839739557480b, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: d61ea23b9fd13af40afe326bb23ac1cd, type: 3}
+  Script: {fileID: 11500000, guid: 1464721f2283eb14e94a33e812b47be4, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 1bedaac29a943f844a7074b53c8bdf9f, type: 3}
+  Script: {fileID: 11500000, guid: d61ea23b9fd13af40afe326bb23ac1cd, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: df9f338034892c44ebb62d97894772f1, type: 3}
 - Class: 114
@@ -98,6 +106,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 43f86b14a27b52f4f9298c33015b5c26, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 5178bc8574ce2bf4388e787a2e2af326, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: c5af6ab9d1bd4a47970ad151090281f3, type: 3}
@@ -107,6 +117,10 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 2606bf2f0c914a7aba4390f29ba2eb6e, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0f5531e0e19dff046a5b9f58ee68fe2e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0b3b3f04ac18184468bedd999e5a6688, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 317e663e2bb60ea408fe22b908b59295, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: ba7282e6cbb44d94b9399c80f4c2c7e4, type: 3}
 - Class: 114
@@ -126,13 +140,17 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 1a379f34d4f4f2e408d34f14bfb753ce, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 901cc0853dbecd74d98375722eb8c7c0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1bb5261d7cd290b4eacc0fd20e2db09f, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 84de3b22a7efbab46967c1a17f5b8cda, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 3673df66324d8f34d9433049c54de631, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: eeb09e4f18fd0954796cd0b766d28fa4, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: f273abee0604ad2409c9bbc9a60e461e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b9e17ab47e49825459b8201ebb003537, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 925ef87c5bafc37469a2f7ec825dee4b, type: 3}
 - Class: 114
@@ -156,8 +174,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: e06fe30fd4efa954b8f53ccc8da8f46b, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: b053556d972eae24b947c1477538bff1, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: eb7d6cff5f17513488d465cdc4efd298, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 998a5646185efb9488265f3a2f35a99a, type: 3}
@@ -177,11 +193,13 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 137
   Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+- Class: 243
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: Oculus.Interaction.Samples
   ClassName: Oculus.Interaction.MinMaxPair
-- AssemblyName: Oculus.Interaction
-  ClassName: Oculus.Interaction.FloatConstraint
 - AssemblyName: Oculus.Interaction
   ClassName: Oculus.Interaction.GrabAPI.GrabbingRule
 - AssemblyName: Oculus.Interaction
@@ -196,8 +214,26 @@ SerializeReferenceClassIdentifiers:
   ClassName: Oculus.Interaction.PoseDetection.FingerFeatureStateProvider/FingerStateThresholds
 - AssemblyName: Oculus.Interaction
   ClassName: Oculus.Interaction.ProgressCurve
-- AssemblyName: Oculus.Interaction
-  ClassName: Oculus.Interaction.TwoHandFreeTransformer/TwoHandFreeConstraints
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FaceInfo_Legacy
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FontAssetCreationSettings
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.KerningTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_Character
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontFeatureTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontWeightPair
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphPairAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphValueRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.VertexGradient
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.ArgumentCache
 - AssemblyName: UnityEngine.CoreModule
@@ -206,35 +242,46 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.Events.PersistentListenerMode
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.UnityEvent
+- AssemblyName: UnityEngine.TextCoreModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreModule
+  ClassName: UnityEngine.TextCore.Glyph
+- AssemblyName: UnityEngine.TextCoreModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreModule
+  ClassName: UnityEngine.TextCore.GlyphRect
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
 Assets:
 - Assets/Oculus/Interaction/Runtime/Prefabs/HandGrab/HandGrabInteractor.prefab
+- Assets/Oculus/Interaction/Samples/Audio/Prefabs/BasicPokeButtonPressAudio.prefab
 - Assets/Oculus/Interaction/Samples/Prefabs/OculusInteractionSampleRig.prefab
 - Assets/Prefabs/OculusInteractionSampleRig Variant.prefab
-- Assets/Oculus/Interaction/Samples/Audio/Prefabs/ComplexGrabStoneResize.prefab
+- Assets/Prefabs/ThrowBall.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/Hands/RightHandVisual.prefab
-- Assets/Oculus/Interaction/Samples/Objects/Props/StonePolyhedra/StonePolyhedron.prefab
 - Assets/Oculus/Interaction/Samples/Audio/Prefabs/ComplexGrabStoneReleaseAudio.prefab
-- Assets/Oculus/Interaction/Samples/Objects/Props/StonePolyhedra/StoneDodecahedron.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/Poke/HandPokeInteractor.prefab
-- Assets/MyAssets/Soda_Can_01 Variant.prefab
-- Assets/Oculus/Interaction/Samples/Audio/Prefabs/ObjectResizeUpAudio.prefab
-- Assets/Oculus/Interaction/Samples/Audio/Prefabs/ObjectResizeDownAudio.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/Hands/RightHandSynthetic.prefab
+- Assets/Prefabs/HoverButtons.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/Hands/LeftHandVisual.prefab
-- Assets/Oculus/Interaction/Samples/Audio/Prefabs/ComplexGrabStoneGrabAudio.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/Poke/ControllerPokeInteractor.prefab
+- Assets/Oculus/Interaction/Samples/Audio/Prefabs/ComplexGrabStoneGrabAudio.prefab
 - Assets/Oculus/VR/Prefabs/OVRCameraRig.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/HandGrab/Ghost-RightHand.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/Hands/LeftHandSynthetic.prefab
+- Assets/Oculus/Interaction/Samples/Audio/Prefabs/BasicPokeButtonReleaseAudio.prefab
 - Assets/Oculus/VR/Prefabs/OVRControllerPrefab.prefab
+- Assets/Prefabs/GameTarget.prefab
+- Assets/Oculus/Interaction/Runtime/Prefabs/Poke/PokeInteractable.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/InputOVR.prefab
-- Assets/Oculus/Interaction/Samples/Audio/Prefabs/ObjectReappearAudio.prefab
 - Assets/Oculus/Interaction/Runtime/Prefabs/HandGrab/Ghost-LeftHand.prefab
-- Assets/Prefabs/StoneDodecahedron Variant.prefab
 Dependencies:
 - D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_asset0
 - D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_controller0
 - D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_fbx0
 - D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_mat0
+- D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_mixer0
+- D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_mp30
 - D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_obj0
+- D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_resources
 - D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_wav0

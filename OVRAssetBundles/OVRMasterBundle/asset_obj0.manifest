@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2427997055
+CRC: 3744379876
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 29f89bfbd23eef0df7746a5be2cd47d8
+    Hash: 16f33c54ae294d6dabe8949f99afdd9f
   TypeTreeHash:
     serializedVersion: 2
     Hash: f64856a3d606b613608cbf22df470c60
@@ -25,8 +25,9 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/MyAssets/WoodStand/model.obj
 - Assets/MyAssets/Can/Soda_Can_01.obj
-- Assets/MyAssets/InfoBoard/InfoBoard.obj
-- Assets/MyAssets/Table/FoldingTable.obj
+- Assets/MyAssets/Icosphere.obj
+- Assets/MyAssets/TreeStump/treeStump.obj
 - Assets/MyAssets/Bowl/fruit bowl.obj
 Dependencies: []

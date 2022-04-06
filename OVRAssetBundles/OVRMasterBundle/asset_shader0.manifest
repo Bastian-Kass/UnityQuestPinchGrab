@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2011855058
+CRC: 4098671236
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 17ba550aaab874b015ce23fd62fd2d60
+    Hash: c96495e34ace5aa750e425e73efd58e2
   TypeTreeHash:
     serializedVersion: 2
     Hash: 68c985bf88fecc38b460cdb825182138
@@ -13,5 +13,9 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/Oculus/Interaction/Runtime/Shaders/RoundedBoxUnlit.shader
+- Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile.shader
+- Assets/Oculus/Interaction/Samples/Shaders/floor.shader
+- Assets/Oculus/SampleFramework/Usage/HandsTrainExample/Shaders/OculusSampleTrainSmokeShader.shader
 - Assets/Oculus/Interaction/Runtime/Shaders/OculusHand.shader
 Dependencies: []

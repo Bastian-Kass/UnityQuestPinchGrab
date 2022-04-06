@@ -1,0 +1,17 @@
+ManifestFileVersion: 0
+CRC: 1378899830
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 1e0ba74371e15eab830a8cedc93ff915
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Oculus/Interaction/Samples/Objects/Props/BigRedButton/Sounds/ButtonHit.ogg
+Dependencies: []

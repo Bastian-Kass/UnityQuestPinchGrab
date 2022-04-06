@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3777831084
+CRC: 3612455950
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 9ef7d7d4dbcdec95edc6df71875ebaf4
+    Hash: 714242eecb26139468fe37fd54d689d7
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1adf4c3a0b393b08ed7a28c22b83c183
@@ -25,8 +25,8 @@ Assets:
 - Assets/Oculus/Interaction/Runtime/Animations/Hands/Hand3qtrFist_l_.anim
 - Assets/Oculus/Interaction/Runtime/Animations/Hands/IndexPoint_l_.anim
 - Assets/Oculus/Interaction/Runtime/Animations/Hands/HandPinch_l_.anim
-- Assets/Oculus/Interaction/Runtime/Animations/Hands/HandFist_l_.anim
 - Assets/Oculus/Interaction/Runtime/Animations/Hands/ThumbUp_r_.anim
+- Assets/Oculus/Interaction/Runtime/Animations/Hands/HandFist_l_.anim
 - Assets/Oculus/Interaction/Runtime/Animations/Hands/indexMask_r_.anim
 - Assets/Oculus/Interaction/Runtime/Animations/Hands/HandFist_r_.anim
 - Assets/Oculus/Interaction/Runtime/Animations/Hands/thumbMask_l_.anim

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1065185823
+CRC: 4005651176
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ba7556c4ac52d014a31a2558a61dc87b
+    Hash: 2531690f11254520adfb0a5ee7ca30af
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 317920cb0e26af913dfcf6c0b10ef1c2
+    Hash: d82477faa37e43179d0a2ac46d33b510
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -14,10 +14,6 @@ ClassTypes:
 - Class: 4
   Script: {instanceID: 0}
 - Class: 21
-  Script: {instanceID: 0}
-- Class: 23
-  Script: {instanceID: 0}
-- Class: 33
   Script: {instanceID: 0}
 - Class: 43
   Script: {instanceID: 0}
@@ -36,7 +32,6 @@ Assets:
 - Assets/Oculus/VR/Meshes/OculusTouchForQuest2/OculusTouchForQuest2_Right.fbx
 - Assets/Oculus/VR/Meshes/OculusTouchForQuest2/OculusTouchForQuest2_Left.fbx
 - Assets/Oculus/VR/Meshes/OculusTouchForQuestAndRiftS/OculusTouchForQuestAndRiftS_Left.fbx
-- Assets/Oculus/Interaction/Samples/Objects/Props/StonePolyhedra/Models/StonePolyhedra.fbx
 - Assets/Oculus/VR/Meshes/OculusTouchForQuestAndRiftS/OculusTouchForQuestAndRiftS_Right.fbx
 - Assets/Oculus/VR/Meshes/HandTracking/OculusHand_R.fbx
 - Assets/Oculus/VR/Meshes/HandTracking/OculusHand_L.fbx

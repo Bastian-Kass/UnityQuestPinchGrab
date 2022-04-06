@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 915257836
+CRC: 735941007
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 8d21f1ed39497b769b77c0c029effdb3
+    Hash: 3aca8b719763a37ccebcaaa407fc0582
   TypeTreeHash:
     serializedVersion: 2
     Hash: c9480adb453efa58ab1f6d8aa06b8720
@@ -32,10 +32,10 @@ SerializeReferenceClassIdentifiers:
   ClassName: Oculus.Interaction.PoseDetection.FingerFeatureThresholds
 Assets:
 - Assets/Oculus/Interaction/Runtime/DefaultSettings/PoseDetection/MiddleFingerFeatureStateThresholds.asset
+- Assets/New Terrain.asset
 - Assets/Oculus/Interaction/Runtime/DefaultSettings/PoseDetection/DefaultThumbFeatureStateThresholds.asset
 - Assets/Oculus/Interaction/Runtime/Prefabs/HandGrab/GhostProvider.asset
 - Assets/Oculus/Interaction/Runtime/Meshes/HandLeft.asset
-- Assets/MyAssets/New Terrain.asset
 - Assets/Oculus/Interaction/Runtime/DefaultSettings/PoseDetection/DefaultFingerFeatureStateThresholds.asset
 - Assets/Oculus/Interaction/Runtime/Meshes/HandRight.asset
 - Assets/Oculus/Interaction/Runtime/DefaultSettings/PoseDetection/IndexFingerFeatureStateThresholds.asset

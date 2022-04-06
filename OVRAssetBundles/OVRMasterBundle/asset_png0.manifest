@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2204082484
+CRC: 3164377989
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6ac610b85461638a65648f8ab70e5249
+    Hash: 66648175f5834cf3bb7298aaf9d183ef
   TypeTreeHash:
     serializedVersion: 2
     Hash: b0363f7088f9761414f730641bf9a24b
@@ -13,7 +13,11 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Oculus/Interaction/Samples/Objects/Props/StonePolyhedra/Textures/StonePolyhedra_AlbedoRoughness.png
+- Assets/MyAssets/Icons/Instructins.png
+- Packages/com.unity.inputsystem/InputSystem/Editor/Icons/InputSystemUIInputModule@64.png
+- Assets/Oculus/Interaction/Samples/Objects/Environment/Room/Textures/ConcreteTiling.png
+- Assets/Oculus/Interaction/Samples/Objects/Environment/Room/Textures/floorDiffuse.png
 - Assets/Oculus/VR/Textures/OculusTouchForRift/touchController_albedo.png
 - Assets/Oculus/Interaction/Runtime/Textures/fingers_glow_mask.png
+- Assets/Oculus/SampleFramework/Usage/HandsTrainExample/Textures/SmokeBillow_atlas_001_v2.png
 Dependencies: []

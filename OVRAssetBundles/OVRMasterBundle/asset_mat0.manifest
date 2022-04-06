@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 35608256
+CRC: 88003939
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 946636fd976349380dfbebc3c5359db5
+    Hash: d93945f44aae69b17356b3b3ced305e3
   TypeTreeHash:
     serializedVersion: 2
     Hash: 939e20ecac0e95a3f7c5cfb3e57acb1d
@@ -17,15 +17,19 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Oculus/Spatializer/scenes/materials/SpatializedObject1.mat
 - Assets/Oculus/VR/Meshes/OculusTouchForQuestAndRiftS/Materials/OculusTouchForQuestAndRiftS_Material.mat
 - Assets/Oculus/Interaction/Runtime/Materials/OculusHandDebug.mat
+- Assets/Materials/TargetMainMaterial.mat
 - Assets/Oculus/VR/Meshes/OculusTouchForRift/Materials/OculusTouchForRift_Material.mat
-- Assets/Oculus/Interaction/Samples/Objects/Props/StonePolyhedra/Materials/StonePolyhedraMat.mat
+- Assets/Oculus/Interaction/Samples/Objects/Environment/Room/Materials/SmallRoomFloorMat.mat
 - Assets/Materials/Glass.mat
 - Assets/Oculus/Interaction/Runtime/Materials/OculusHand.mat
+- Assets/Oculus/Interaction/Runtime/Materials/RoundedBoxUnlit.mat
 - Assets/Oculus/VR/Meshes/OculusTouchForQuest2/Materials/OculusTouchForQuest2_MAT.mat
+- Assets/Oculus/SampleFramework/Usage/SpatialAnchor/Materials/Passthrough.mat
+- Assets/Materials/WoodMaterial.mat
 - Assets/Oculus/Interaction/Runtime/Materials/Unlit Material.mat
+- Assets/Oculus/SampleFramework/Usage/HandsTrainExample/Materials/SmokeBillowMat.mat
 Dependencies:
 - D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_png0
 - D:/UnityProjects/UnityQuestPinchGrab/OVRAssetBundles/OVRMasterBundle/asset_shader0
