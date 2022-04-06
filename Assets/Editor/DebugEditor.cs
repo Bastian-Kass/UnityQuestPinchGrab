@@ -6,6 +6,9 @@ using UnityEditor;
 [CustomEditor(typeof(DebugManager))]
 public class GameBallInspector : Editor
 {
+
+    public GameManagerScript gmScript;
+
     public override void OnInspectorGUI()
     {
         // base.OnInspectorGUI();
@@ -18,9 +21,14 @@ public class GameBallInspector : Editor
 
         if (Application.isPlaying) {
 
-
+            GameManagerScript manager = FindObjectOfType<GameManagerScript>();
 
             EditorGUILayout.LabelField("Slow Motion", debugManagerScript.SlowMode.ToString());
+
+            if(GUILayout.Button("CheatMode"))
+            {
+                manager.ToggleCheatMode();
+            }
 
             if(GUILayout.Button("SlowMode"))
             {
