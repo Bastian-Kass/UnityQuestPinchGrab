@@ -11,8 +11,8 @@ public class TargetCollisionManager : MonoBehaviour
     public bool InTargetZone { get; private set; }
 
     private Rigidbody _rigidbody;
-    private Vector3 _initial_position;
-    private Quaternion _initial_rotation;
+    public Vector3 _initial_position { get; private set; }
+    public Quaternion _initial_rotation { get; private set; }
 
     [Header("Visual feedback settings")]
     [SerializeField]
@@ -38,7 +38,15 @@ public class TargetCollisionManager : MonoBehaviour
             OnTargetHit = new UnityEvent<Collision>();
     }
 
+
+    private void Start(){
+
+
+
+    }
+
     private void Awake(){
+
         // Getting variables from the target's start position
         _rigidbody = gameObject.GetComponent<Rigidbody>();
 
@@ -60,11 +68,14 @@ public class TargetCollisionManager : MonoBehaviour
     }
 
     public void InitTarget(){
-        //Removing velicty when positioning
+        //Removing velocity when positioning
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
 
         // Reset to initial position and rotation
+        // _rigidbody.MovePosition(_initial_position);
+        // _rigidbody.MoveRotation(_initial_rotation);
+         
         gameObject.transform.position = _initial_position;
         gameObject.transform.rotation = _initial_rotation;
 

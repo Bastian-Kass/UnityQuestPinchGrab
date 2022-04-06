@@ -8,31 +8,39 @@ public class DebugManager : MonoBehaviour
 
     public GameObject debugBall;
 
-    private bool debugMode = false;
+    public bool debugMode = false;
+
+    public bool SlowMode { get; private set; }
 
     public Vector3 ThrowPosition;
     public Vector3 ThrowDirection;
     private LineRenderer LineDrawer;
+    private float TimeStep = 0.03f;
+
+
+    public float slowdownFactor = 0.05f;
 
     public void OnEnable(){
+        this.SlowMode = false;
+        this.TimeStep = Time.fixedDeltaTime;
         LineDrawer = gameObject.GetComponent<LineRenderer>();
     }
 
-    public void NextPhysicsFrame(){
-
-        if(debugMode){
+    public void ToggleSlowMotion(){
+        if(SlowMode){
             Time.timeScale = 1f;
-            Time.fixedDeltaTime = 1f;
+            Time.fixedDeltaTime = this.TimeStep ;
 
-            debugMode = false;
+            SlowMode = false;
         } else{
+            Time.timeScale = this.slowdownFactor;
+            Time.fixedDeltaTime = Time.timeScale * this.TimeStep;
 
-            Time.timeScale = .05f;
-            Time.fixedDeltaTime = Time.timeScale * .02f;
-
-            debugMode = true;
+            SlowMode = true;
         }
+
     }
+
 
     public void ThrowDebugBall(){
         debugBall.GetComponent<GameBallManager>().Initialize();
