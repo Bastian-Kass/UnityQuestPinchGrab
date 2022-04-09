@@ -95,6 +95,7 @@ public class GameBallManager : MonoBehaviour
         //Setting as active
         ActiveBall = true;
         ThrownBall = false;
+        outOfBoundsCounter_Flag = false;
     }
 
     private void RestartPosition(GameManagerScript.GameStateType state)
@@ -220,6 +221,8 @@ public class GameBallManager : MonoBehaviour
             return sum_vector/_targets.Count;
     }
 
+    private bool outOfBoundsCounter_Flag = false;
+
 
     /// <summary>
     /// Counter to determine if ball has left and stayed out of bounds for certain amount of time
@@ -227,14 +230,20 @@ public class GameBallManager : MonoBehaviour
     IEnumerator BallOutOfBounds(Collider other)
     {
 
+        outOfBoundsCounter_Flag = true;
+
         yield return new WaitForSeconds(1);
+
 
         // Recheck if the ball is still out of bounds.
         if(other.bounds.Contains(transform.position))
             yield return null;
 
         //After countdown we deactivate the ball
-        ActiveBall = false; 
+        if(outOfBoundsCounter_Flag)
+            ActiveBall = false; 
+
+        outOfBoundsCounter_Flag = false;
         
     }
 

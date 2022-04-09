@@ -5,6 +5,7 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class DebugManager : MonoBehaviour
 {
+    
 
     public GameObject debugBall;
 
@@ -18,9 +19,21 @@ public class DebugManager : MonoBehaviour
 
     public float slowdownFactor = 0.05f;
 
+    void OnGUI()
+    {
+
+
+        if (GUILayout.Button("I am a regular Automatic Layout Button"))
+        {
+            Debug.Log("Clicked Button");
+        }
+    }
+
     public void OnEnable(){
         this.SlowMode = false;
         this.TimeStep = Time.fixedDeltaTime;
+
+       
     }
 
     public void ToggleSlowMotion(){
